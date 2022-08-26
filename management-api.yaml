@@ -1,0 +1,66 @@
+---
+openapi: 3.0.1
+info:
+  title: Management API
+  description: Management API for KIQR Headless CMS
+  version: 0.2.4
+paths:
+  "/user":
+    get:
+      summary: Retrieve information about the signed in user.
+      tags:
+      - User
+      parameters:
+      - name: Authorization
+        in: header
+        schema:
+          type: string
+      responses:
+        '401':
+          description: returns 401 forbidden if unauthenticated
+        '200':
+          description: returns the current authenticated user
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/User"
+servers:
+- url: https://management-api.kiqr.cloud/v1
+components:
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      flows:
+        implicit:
+          authorizationUrl: https://kiqr.cloud/oauth/authorize
+          tokenUrl: https://kiqr.cloud/oauth/token
+          scopes:
+            profile: Access user profile
+  schemas:
+    User:
+      type: object
+      required:
+      - id
+      - name
+      - email
+      - avatar_url
+      - updated_at
+      - created_at
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 247978105417915195
+        name:
+          type: string
+          example: John Doe
+        email:
+          type: string
+          example: john.doe@mail.com
+        avatar_url:
+          type: string
+          example: https://avatars.dicebear.com/api/identicon/avatar.svg
+        updated_at:
+          type: number
+        created_at:
+          type: number
