@@ -5,6 +5,27 @@ info:
   description: Management API for KIQR Headless CMS
   version: 0.0.1
 paths:
+  "/projects":
+    get:
+      summary: List the current user's available projects
+      tags:
+      - Projects
+      parameters:
+      - name: Authorization
+        in: header
+        schema:
+          type: string
+      responses:
+        '401':
+          description: returns 401 forbidden if unauthenticated
+        '200':
+          description: returns a list of projects
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/Project"
   "/user":
     get:
       summary: Retrieve information about the signed in user.
@@ -62,5 +83,40 @@ components:
           example: https://avatars.dicebear.com/api/identicon/avatar.svg
         updated_at:
           type: number
+          example: 1661635065
         created_at:
           type: number
+          example: 1661635065
+    Project:
+      type: object
+      required:
+      - id
+      - name
+      - slug
+      - environments_count
+      - schemas_count
+      - updated_at
+      - created_at
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 345145357946791
+        name:
+          type: string
+          example: Example.com website
+        slug:
+          type: string
+          example: example-com
+        environments_count:
+          type: number
+          example: 3
+        schemas_count:
+          type: number
+          example: 18
+        updated_at:
+          type: number
+          example: 1661635065
+        created_at:
+          type: number
+          example: 1661635065
