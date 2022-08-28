@@ -3,7 +3,7 @@ openapi: 3.0.1
 info:
   title: Management API
   description: Management API for KIQR Headless CMS
-  version: 0.0.1
+  version: 0.0.2
 paths:
   "/projects":
     get:
@@ -15,6 +15,7 @@ paths:
         in: header
         schema:
           type: string
+      operationId: get
       responses:
         '401':
           description: returns 401 forbidden if unauthenticated
@@ -36,6 +37,7 @@ paths:
         in: header
         schema:
           type: string
+      operationId: get
       responses:
         '401':
           description: returns 401 forbidden if unauthenticated
