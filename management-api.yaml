@@ -3,7 +3,7 @@ openapi: 3.0.1
 info:
   title: Management API
   description: Management API for KIQR Headless CMS
-  version: 0.1.0
+  version: 0.1.1
 paths:
   "/projects":
     get:
@@ -32,7 +32,7 @@ paths:
       summary: Get a project by ID
       tags:
       - Projects
-      operationId: getProjectByID
+      operationId: getProject
       parameters:
       - name: Authorization
         in: header
