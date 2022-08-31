@@ -3,19 +3,19 @@ openapi: 3.0.1
 info:
   title: Management API
   description: Management API for KIQR Headless CMS
-  version: 0.0.3
+  version: 0.1.0
 paths:
   "/projects":
     get:
       summary: List the current user's available projects
       tags:
       - Projects
+      operationId: getProjects
       parameters:
       - name: Authorization
         in: header
         schema:
           type: string
-      operationId: getProjects
       responses:
         '401':
           description: returns 401 forbidden if unauthenticated
@@ -27,6 +27,31 @@ paths:
                 type: array
                 items:
                   "$ref": "#/components/schemas/Project"
+  "/projects/{id}":
+    get:
+      summary: Get a project by ID
+      tags:
+      - Projects
+      operationId: getProjectByID
+      parameters:
+      - name: Authorization
+        in: header
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '401':
+          description: returns 401 forbidden if unauthenticated
+        '200':
+          description: returns a project
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Project"
   "/user":
     get:
       summary: Retrieve information about the signed in user.
