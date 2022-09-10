@@ -3,7 +3,7 @@ openapi: 3.0.1
 info:
   title: Management API
   description: Management API for KIQR Headless CMS
-  version: 0.1.2
+  version: 0.1.3
 paths:
   "/projects":
     get:
@@ -27,6 +27,37 @@ paths:
                 type: array
                 items:
                   "$ref": "#/components/schemas/Project"
+    post:
+      summary: Create a project
+      tags:
+      - Projects
+      operationId: createProject
+      parameters:
+      - name: Authorization
+        in: header
+        schema:
+          type: string
+      responses:
+        '401':
+          description: returns 401 forbidden if unauthenticated
+        '201':
+          description: returns a project
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Project"
+        '422':
+          description: invalid name
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+              required:
+              - name
   "/projects/{id}":
     get:
       summary: Get a project by ID
