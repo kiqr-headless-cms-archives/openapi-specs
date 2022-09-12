@@ -3,7 +3,7 @@ openapi: 3.0.1
 info:
   title: Management API
   description: Management API for KIQR Headless CMS
-  version: 0.2.0
+  version: 0.1.3
 paths:
   "/projects/{project_id}/schemas":
     post:
@@ -36,8 +36,10 @@ paths:
             schema:
               type: object
               properties:
-                name:
+                message:
                   type: string
+                data:
+                  type: object
               required:
               - name
   "/projects":
