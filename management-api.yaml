@@ -41,7 +41,8 @@ paths:
                 data:
                   type: object
               required:
-              - name
+              - message
+              - data
   "/projects":
     get:
       summary: List the current user's available projects
