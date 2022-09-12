@@ -3,8 +3,43 @@ openapi: 3.0.1
 info:
   title: Management API
   description: Management API for KIQR Headless CMS
-  version: 0.1.1
+  version: 0.2.0
 paths:
+  "/projects/{project_id}/schemas":
+    post:
+      summary: Create a schema
+      tags:
+      - Schemas
+      operationId: createSchema
+      security:
+      - oauth2: []
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '401':
+          description: returns 401 forbidden if unauthenticated
+        '201':
+          description: returns a schema
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Schema"
+        '422':
+          description: validation failed
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+              required:
+              - name
   "/projects":
     get:
       summary: List the current user's available projects
@@ -164,6 +199,41 @@ components:
         schemas_count:
           type: number
           example: 18
+        updated_at:
+          type: number
+          example: 1661635065
+        created_at:
+          type: number
+          example: 1661635065
+    Schema:
+      type: object
+      required:
+      - id
+      - version
+      - message
+      - project_id
+      - user_id
+      - updated_at
+      - created_at
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 345145357946791
+        version:
+          type: number
+          example: 27
+        message:
+          type: string
+          example: Created a content type for blog posts
+        project_id:
+          type: string
+          format: uuid
+          example: 345145357946791
+        user_id:
+          type: string
+          format: uuid
+          example: 345145357946791
         updated_at:
           type: number
           example: 1661635065
