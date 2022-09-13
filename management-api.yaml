@@ -3,7 +3,7 @@ openapi: 3.0.1
 info:
   title: Management API
   description: Management API for KIQR Headless CMS
-  version: 0.2.0
+  version: 0.2.1
 paths:
   "/projects/{project_id}/schemas":
     post:
@@ -19,6 +19,10 @@ paths:
         required: true
         schema:
           type: string
+      - name: last_schema_version
+        in: query
+        schema:
+          type: string
       responses:
         '401':
           description: returns 401 forbidden if unauthenticated
@@ -28,6 +32,8 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/Schema"
+        '409':
+          description: with conflicting version number
         '422':
           description: validation failed
       requestBody:
