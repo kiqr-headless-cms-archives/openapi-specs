@@ -3,7 +3,7 @@ openapi: 3.0.1
 info:
   title: Management API
   description: Management API for KIQR Headless CMS
-  version: 0.3.1
+  version: 0.3.2
 paths:
   "/projects/{project_id}/schemas":
     post:
@@ -99,7 +99,7 @@ paths:
               - name
   "/projects/{id}":
     get:
-      summary: Get a project by ID
+      summary: Get a project
       tags:
       - Projects
       operationId: getProject
@@ -115,7 +115,7 @@ paths:
         '401':
           description: returns 401 forbidden if unauthenticated
         '200':
-          description: returns a project
+          description: get by SLUG
           content:
             application/json:
               schema:
