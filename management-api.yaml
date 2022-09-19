@@ -358,60 +358,6 @@ components:
           example: 1661635065
         data:
           type: object
-          required:
-          - content_types
-          properties:
-            content_types:
-              type: object
-              patternProperties:
-                "^[a-zA-Z_-]+$":
-                  type: object
-                  properties:
-                    name:
-                      type: string
-                    kind:
-                      type: string
-                      enum:
-                      - collection
-                      - component
-                    fields:
-                      type: object
-                      patternProperties:
-                        "^[a-zA-Z0-9_-]+$":
-                          type: object
-                          properties:
-                            type:
-                              type: string
-                              enum:
-                              - string
-                              - text
-                            label:
-                              type: string
-                            required:
-                              type: boolean
-                          required:
-                          - type
-                          - label
-                          - required
-                          additionalProperties: false
-                      additionalProperties: false
-                    associations:
-                      type: object
-                      patternProperties:
-                        "^[a-zA-Z0-9_-]+$":
-                          type: object
-                          properties:
-                            title:
-                              type: string
-                            to:
-                              type: string
-                          required: []
-                          additionalProperties: false
-                  required:
-                  - name
-                  - kind
-                  additionalProperties: false
-              additionalProperties: false
     Environment:
       type: object
       required:
