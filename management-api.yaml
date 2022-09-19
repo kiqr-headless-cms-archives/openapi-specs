@@ -3,7 +3,7 @@ openapi: 3.0.1
 info:
   title: Management API
   description: Management API for KIQR Headless CMS
-  version: 0.4.0
+  version: 0.5.0
 paths:
   "/environments":
     get:
@@ -25,6 +25,30 @@ paths:
                 items:
                   "$ref": "#/components/schemas/Environment"
   "/projects/{project_id}/schemas":
+    get:
+      summary: List project schemas
+      tags:
+      - Schemas
+      operationId: getSchemas
+      security:
+      - oauth2: []
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '401':
+          description: returns 401 forbidden if unauthenticated
+        '200':
+          description: returns a list of schemas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/Schema"
     post:
       summary: Create a schema
       tags:
@@ -68,6 +92,34 @@ paths:
               required:
               - message
               - data
+  "/projects/{project_id}/schemas/{id}":
+    get:
+      summary: Get a schema
+      tags:
+      - Schemas
+      operationId: getSchema
+      security:
+      - oauth2: []
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '401':
+          description: returns 401 forbidden if unauthenticated
+        '200':
+          description: get by ID
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Schema"
   "/projects":
     get:
       summary: List the current user's available projects
