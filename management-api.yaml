@@ -3,7 +3,7 @@ openapi: 3.0.1
 info:
   title: Management API
   description: Management API for KIQR Headless CMS
-  version: 0.5.0
+  version: 0.5.1
 paths:
   "/environments":
     get:
@@ -119,7 +119,7 @@ paths:
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/Schema"
+                "$ref": "#/components/schemas/SchemaExtended"
   "/projects":
     get:
       summary: List the current user's available projects
@@ -320,6 +320,98 @@ components:
         created_at:
           type: number
           example: 1661635065
+    SchemaExtended:
+      type: object
+      required:
+      - id
+      - data
+      - version
+      - message
+      - project_id
+      - user_id
+      - updated_at
+      - created_at
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 345145357946791
+        version:
+          type: number
+          example: 27
+        message:
+          type: string
+          example: Created a content type for blog posts
+        project_id:
+          type: string
+          format: uuid
+          example: 345145357946791
+        user_id:
+          type: string
+          format: uuid
+          example: 345145357946791
+        updated_at:
+          type: number
+          example: 1661635065
+        created_at:
+          type: number
+          example: 1661635065
+        data:
+          type: object
+          required:
+          - content_types
+          properties:
+            content_types:
+              type: object
+              patternProperties:
+                "^[a-zA-Z_-]+$":
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    kind:
+                      type: string
+                      enum:
+                      - collection
+                      - component
+                    fields:
+                      type: object
+                      patternProperties:
+                        "^[a-zA-Z0-9_-]+$":
+                          type: object
+                          properties:
+                            type:
+                              type: string
+                              enum:
+                              - string
+                              - text
+                            label:
+                              type: string
+                            required:
+                              type: boolean
+                          required:
+                          - type
+                          - label
+                          - required
+                          additionalProperties: false
+                      additionalProperties: false
+                    associations:
+                      type: object
+                      patternProperties:
+                        "^[a-zA-Z0-9_-]+$":
+                          type: object
+                          properties:
+                            title:
+                              type: string
+                            to:
+                              type: string
+                          required: []
+                          additionalProperties: false
+                  required:
+                  - name
+                  - kind
+                  additionalProperties: false
+              additionalProperties: false
     Environment:
       type: object
       required:
