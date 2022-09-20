@@ -357,52 +357,16 @@ components:
           type: number
           example: 1661635065
         data:
-          type: object
-          properties:
-            content_types:
-              type: array
-              items:
-                "$ref": "#/components/schemas/Environment"
-          required:
-          - content_types
-    Environment:
+          "$ref": "#/components/schemas/SchemaData"
+    SchemaData:
       type: object
-      required:
-      - id
-      - name
-      - slug
-      - project_id
-      - schema_id
-      - updated_at
-      - created_at
       properties:
-        id:
-          type: string
-          format: uuid
-          example: 345145357946791
-        project_id:
-          type: string
-          format: uuid
-          example: 345145357946791
-        schema_id:
-          type: string
-          format: uuid
-          example: 345145357946791
-        name:
-          type: string
-          example: Development
-        slug:
-          type: string
-          example: development
-        promote_new_schemas:
-          type: boolean
-          example: true
-        updated_at:
-          type: number
-          example: 1661635065
-        created_at:
-          type: number
-          example: 1661635065
+        content_types:
+          type: array
+          items:
+            "$ref": "#/components/schemas/ContentType"
+      required:
+      - content_types
     ContentType:
       type: object
       properties:
@@ -474,3 +438,41 @@ components:
       - associations
       - fields
       additionalProperties: false
+    Environment:
+      type: object
+      required:
+      - id
+      - name
+      - slug
+      - project_id
+      - schema_id
+      - updated_at
+      - created_at
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 345145357946791
+        project_id:
+          type: string
+          format: uuid
+          example: 345145357946791
+        schema_id:
+          type: string
+          format: uuid
+          example: 345145357946791
+        name:
+          type: string
+          example: Development
+        slug:
+          type: string
+          example: development
+        promote_new_schemas:
+          type: boolean
+          example: true
+        updated_at:
+          type: number
+          example: 1661635065
+        created_at:
+          type: number
+          example: 1661635065
