@@ -3,7 +3,7 @@ openapi: 3.0.1
 info:
   title: Management API
   description: Management API for KIQR Headless CMS
-  version: 0.6.0
+  version: 0.5.2
 paths:
   "/environments":
     get:
@@ -358,8 +358,6 @@ components:
           example: 1661635065
         data:
           type: object
-          required:
-          - content_types
           properties:
             content_types:
               type: array
@@ -434,7 +432,8 @@ components:
                 - associations
                 - fields
                 additionalProperties: false
-          additionalProperties: false
+          required:
+          - content_types
     Environment:
       type: object
       required:
@@ -473,3 +472,74 @@ components:
         created_at:
           type: number
           example: 1661635065
+    ContentType:
+      type: object
+      properties:
+        id:
+          type: string
+          minLength: 3
+          maxLength: 30
+        name:
+          type: string
+          minLength: 3
+          maxLength: 30
+        kind:
+          type: string
+          enum:
+          - collection
+          - component
+        associations:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                minLength: 3
+                maxLength: 30
+              label:
+                type: string
+                minLength: 3
+                maxLength: 30
+              to:
+                type: string
+                minLength: 3
+                maxLength: 30
+            required:
+            - id
+            - label
+            - to
+            additionalProperties: false
+        fields:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                minLength: 3
+                maxLength: 30
+              label:
+                type: string
+                minLength: 3
+                maxLength: 30
+              type:
+                type: string
+                enum:
+                - string
+                - text
+              required:
+                type: boolean
+            required:
+            - id
+            - label
+            - type
+            - required
+            additionalProperties: false
+      required:
+      - id
+      - name
+      - kind
+      - associations
+      - fields
+      additionalProperties: false
