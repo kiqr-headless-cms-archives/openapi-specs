@@ -357,16 +357,14 @@ components:
           type: number
           example: 1661635065
         data:
-          "$ref": "#/components/schemas/SchemaExtendedData"
-    SchemaExtendedData:
-      type: object
-      properties:
-        content_types:
-          type: array
-          items:
-            "$ref": "#/components/schemas/ContentType"
-        required:
-        - content_types
+          type: object
+          properties:
+            content_types:
+              type: array
+              items:
+                "$ref": "#/components/schemas/ContentType"
+            required:
+            - content_types
     ContentType:
       type: object
       properties:
