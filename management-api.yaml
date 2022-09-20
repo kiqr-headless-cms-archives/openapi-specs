@@ -357,16 +357,16 @@ components:
           type: number
           example: 1661635065
         data:
-          "$ref": "#/components/schemas/SchemaData"
-    SchemaData:
+          "$ref": "#/components/schemas/SchemaExtendedData"
+    SchemaExtendedData:
       type: object
       properties:
         content_types:
           type: array
           items:
             "$ref": "#/components/schemas/ContentType"
-      required:
-      - content_types
+        required:
+        - content_types
     ContentType:
       type: object
       properties:
@@ -386,57 +386,61 @@ components:
         associations:
           type: array
           items:
-            type: object
-            properties:
-              id:
-                type: string
-                minLength: 3
-                maxLength: 30
-              label:
-                type: string
-                minLength: 3
-                maxLength: 30
-              to:
-                type: string
-                minLength: 3
-                maxLength: 30
-            required:
-            - id
-            - label
-            - to
-            additionalProperties: false
+            "$ref": "#/components/schemas/ContentTypeAssociation"
         fields:
           type: array
           items:
-            type: object
-            properties:
-              id:
-                type: string
-                minLength: 3
-                maxLength: 30
-              label:
-                type: string
-                minLength: 3
-                maxLength: 30
-              type:
-                type: string
-                enum:
-                - string
-                - text
-              required:
-                type: boolean
-            required:
-            - id
-            - label
-            - type
-            - required
-            additionalProperties: false
+            "$ref": "#/components/schemas/ContentTypeField"
       required:
       - id
       - name
       - kind
       - associations
       - fields
+      additionalProperties: false
+    ContentTypeAssociation:
+      type: object
+      properties:
+        id:
+          type: string
+          minLength: 3
+          maxLength: 30
+        label:
+          type: string
+          minLength: 3
+          maxLength: 30
+        to:
+          type: string
+          minLength: 3
+          maxLength: 30
+      required:
+      - id
+      - label
+      - to
+      additionalProperties: false
+    ContentTypeField:
+      type: object
+      properties:
+        id:
+          type: string
+          minLength: 3
+          maxLength: 30
+        label:
+          type: string
+          minLength: 3
+          maxLength: 30
+        type:
+          type: string
+          enum:
+          - string
+          - text
+        required:
+          type: boolean
+      required:
+      - id
+      - label
+      - type
+      - required
       additionalProperties: false
     Environment:
       type: object
