@@ -364,75 +364,7 @@ components:
         content_types:
           type: array
           items:
-            type: object
-            properties:
-              id:
-                type: string
-                minLength: 3
-                maxLength: 30
-              name:
-                type: string
-                minLength: 3
-                maxLength: 30
-              kind:
-                type: string
-                enum:
-                - collection
-                - component
-              associations:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    id:
-                      type: string
-                      minLength: 3
-                      maxLength: 30
-                    label:
-                      type: string
-                      minLength: 3
-                      maxLength: 30
-                    to:
-                      type: string
-                      minLength: 3
-                      maxLength: 30
-                  required:
-                  - id
-                  - label
-                  - to
-                  additionalProperties: false
-              fields:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    id:
-                      type: string
-                      minLength: 3
-                      maxLength: 30
-                    label:
-                      type: string
-                      minLength: 3
-                      maxLength: 30
-                    type:
-                      type: string
-                      enum:
-                      - string
-                      - text
-                    required:
-                      type: boolean
-                  required:
-                  - id
-                  - label
-                  - type
-                  - required
-                  additionalProperties: false
-            required:
-            - id
-            - name
-            - kind
-            - associations
-            additionalProperties: false
+            "$ref": "#/components/schemas/ContentType"
     ContentType:
       type: object
       properties:
@@ -452,51 +384,11 @@ components:
         associations:
           type: array
           items:
-            type: object
-            properties:
-              id:
-                type: string
-                minLength: 3
-                maxLength: 30
-              label:
-                type: string
-                minLength: 3
-                maxLength: 30
-              to:
-                type: string
-                minLength: 3
-                maxLength: 30
-            required:
-            - id
-            - label
-            - to
-            additionalProperties: false
+            "$ref": "#/components/schemas/ContentTypeAssociation"
         fields:
           type: array
           items:
-            type: object
-            properties:
-              id:
-                type: string
-                minLength: 3
-                maxLength: 30
-              label:
-                type: string
-                minLength: 3
-                maxLength: 30
-              type:
-                type: string
-                enum:
-                - string
-                - text
-              required:
-                type: boolean
-            required:
-            - id
-            - label
-            - type
-            - required
-            additionalProperties: false
+            "$ref": "#/components/schemas/ContentTypeField"
       required:
       - id
       - name
