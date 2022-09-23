@@ -365,8 +365,8 @@ components:
           type: array
           items:
             "$ref": "#/components/schemas/ContentType"
-        required:
-        - content_types
+      required:
+      - content_types
     ContentType:
       type: object
       properties:
