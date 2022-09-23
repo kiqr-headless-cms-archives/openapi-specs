@@ -3,7 +3,7 @@ openapi: 3.0.1
 info:
   title: Management API
   description: Management API for KIQR Headless CMS
-  version: 0.7.1
+  version: 0.7.2
 paths:
   "/environments":
     get:
@@ -70,7 +70,7 @@ paths:
         '401':
           description: returns 401 forbidden if unauthenticated
         '201':
-          description: returns a schema
+          description: with empty content types
           content:
             application/json:
               schema:
@@ -78,7 +78,7 @@ paths:
         '409':
           description: with conflicting version number
         '422':
-          description: validation failed
+          description: with invalid field
       requestBody:
         content:
           application/json:
@@ -364,7 +364,75 @@ components:
         content_types:
           type: array
           items:
-            "$ref": "#/components/schemas/ContentType"
+            type: object
+            properties:
+              id:
+                type: string
+                minLength: 3
+                maxLength: 30
+              name:
+                type: string
+                minLength: 3
+                maxLength: 30
+              kind:
+                type: string
+                enum:
+                - collection
+                - component
+              associations:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      minLength: 3
+                      maxLength: 30
+                    label:
+                      type: string
+                      minLength: 3
+                      maxLength: 30
+                    to:
+                      type: string
+                      minLength: 3
+                      maxLength: 30
+                  required:
+                  - id
+                  - label
+                  - to
+                  additionalProperties: false
+              fields:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      minLength: 3
+                      maxLength: 30
+                    label:
+                      type: string
+                      minLength: 3
+                      maxLength: 30
+                    type:
+                      type: string
+                      enum:
+                      - string
+                      - text
+                    required:
+                      type: boolean
+                  required:
+                  - id
+                  - label
+                  - type
+                  - required
+                  additionalProperties: false
+            required:
+            - id
+            - name
+            - kind
+            - associations
+            additionalProperties: false
     ContentType:
       type: object
       properties:
@@ -384,17 +452,56 @@ components:
         associations:
           type: array
           items:
-            "$ref": "#/components/schemas/ContentTypeAssociation"
+            type: object
+            properties:
+              id:
+                type: string
+                minLength: 3
+                maxLength: 30
+              label:
+                type: string
+                minLength: 3
+                maxLength: 30
+              to:
+                type: string
+                minLength: 3
+                maxLength: 30
+            required:
+            - id
+            - label
+            - to
+            additionalProperties: false
         fields:
           type: array
           items:
-            "$ref": "#/components/schemas/ContentTypeField"
+            type: object
+            properties:
+              id:
+                type: string
+                minLength: 3
+                maxLength: 30
+              label:
+                type: string
+                minLength: 3
+                maxLength: 30
+              type:
+                type: string
+                enum:
+                - string
+                - text
+              required:
+                type: boolean
+            required:
+            - id
+            - label
+            - type
+            - required
+            additionalProperties: false
       required:
       - id
       - name
       - kind
       - associations
-      - fields
       additionalProperties: false
     ContentTypeAssociation:
       type: object
