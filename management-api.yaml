@@ -3,7 +3,7 @@ openapi: 3.0.1
 info:
   title: Management API
   description: Management API for KIQR Headless CMS
-  version: 0.7.4
+  version: 0.7.5
 paths:
   "/environments":
     get:
