@@ -3,7 +3,7 @@ openapi: 3.0.1
 info:
   title: Management API
   description: Management API for KIQR Headless CMS
-  version: 0.8.0
+  version: 0.8.1
 paths:
   "/environments":
     get:
@@ -28,8 +28,8 @@ paths:
     get:
       summary: List resources
       tags:
-      - Schemas
-      operationId: getSchemas
+      - Resources
+      operationId: getResources
       security:
       - oauth2: []
       parameters:
