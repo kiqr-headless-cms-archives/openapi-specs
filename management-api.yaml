@@ -3,7 +3,7 @@ openapi: 3.0.1
 info:
   title: Management API
   description: Management API for KIQR Headless CMS
-  version: 0.7.5
+  version: 0.8.0
 paths:
   "/environments":
     get:
@@ -24,6 +24,35 @@ paths:
                 type: array
                 items:
                   "$ref": "#/components/schemas/Environment"
+  "/projects/{project_id}/resources":
+    get:
+      summary: List resources
+      tags:
+      - Schemas
+      operationId: getSchemas
+      security:
+      - oauth2: []
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: environment_id
+        in: query
+        schema:
+          type: string
+      responses:
+        '401':
+          description: returns 401 forbidden if unauthenticated
+        '200':
+          description: returns a list of resources
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/Resource"
   "/projects/{project_id}/schemas":
     get:
       summary: List project schemas
@@ -474,6 +503,92 @@ components:
         promote_new_schemas:
           type: boolean
           example: true
+        updated_at:
+          type: number
+          example: 1661635065
+        created_at:
+          type: number
+          example: 1661635065
+    Resource:
+      type: object
+      required:
+      - id
+      - name
+      - slug
+      - project_id
+      - environment_id
+      - name
+      - slug
+      - content_type
+      - meta
+      - updated_at
+      - created_at
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 345145357946791
+        project_id:
+          type: string
+          format: uuid
+          example: 345145357946791
+        environment_id:
+          type: string
+          format: uuid
+          example: 345145357946791
+        name:
+          type: string
+          example: My first post
+        slug:
+          type: string
+          example: my-first-post
+        content_type:
+          type: string
+          example: posts
+        updated_at:
+          type: number
+          example: 1661635065
+        created_at:
+          type: number
+          example: 1661635065
+    ResourceExtended:
+      type: object
+      required:
+      - id
+      - name
+      - slug
+      - project_id
+      - environment_id
+      - name
+      - slug
+      - content_type
+      - meta
+      - updated_at
+      - created_at
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 345145357946791
+        project_id:
+          type: string
+          format: uuid
+          example: 345145357946791
+        environment_id:
+          type: string
+          format: uuid
+          example: 345145357946791
+        name:
+          type: string
+          example: My first post
+        slug:
+          type: string
+          example: my-first-post
+        content_type:
+          type: string
+          example: posts
+        meta:
+          type: object
         updated_at:
           type: number
           example: 1661635065
