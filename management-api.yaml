@@ -3,7 +3,7 @@ openapi: 3.0.1
 info:
   title: Management API
   description: Management API for KIQR Headless CMS
-  version: 0.9.0
+  version: 0.10.0
 paths:
   "/environments":
     get:
@@ -59,6 +59,46 @@ paths:
                 type: array
                 items:
                   "$ref": "#/components/schemas/Resource"
+        '400':
+          description: missing content type
+  "/projects/{project_id}/resources/{id}":
+    get:
+      summary: Get a resources
+      tags:
+      - Resources
+      operationId: getResource
+      security:
+      - oauth2: []
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: environment_id
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: content_type
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        '401':
+          description: returns 401 forbidden if unauthenticated
+        '200':
+          description: returns a resource
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Resource"
         '400':
           description: missing content type
   "/projects/{project_id}/schemas":
@@ -528,7 +568,6 @@ components:
       - name
       - slug
       - content_type
-      - meta
       - updated_at
       - created_at
       properties:
@@ -570,7 +609,6 @@ components:
       - name
       - slug
       - content_type
-      - meta
       - updated_at
       - created_at
       properties:
