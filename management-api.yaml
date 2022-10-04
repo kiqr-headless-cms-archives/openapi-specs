@@ -3,7 +3,7 @@ openapi: 3.0.1
 info:
   title: Management API
   description: Management API for KIQR Headless CMS
-  version: 0.11.0
+  version: 0.12.0
 paths:
   "/environments":
     get:
@@ -78,7 +78,7 @@ paths:
         '401':
           description: returns 401 forbidden if unauthenticated
         '201':
-          description: returns a resource
+          description: with contents / meta fields
           content:
             application/json:
               schema:
@@ -103,6 +103,8 @@ paths:
                   type: string
                 environment_id:
                   type: string
+                content:
+                  type: object
               required:
               - name
               - slug
@@ -616,6 +618,9 @@ components:
       - name
       - slug
       - content_type
+      - content_version
+      - contents_count
+      - content
       - updated_at
       - created_at
       properties:
@@ -640,6 +645,14 @@ components:
         content_type:
           type: string
           example: posts
+        content_version:
+          type: number
+          example: 1
+        contents_count:
+          type: number
+          example: 1
+        content:
+          type: object
         updated_at:
           type: number
           example: 1661635065
