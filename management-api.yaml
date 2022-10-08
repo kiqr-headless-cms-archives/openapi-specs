@@ -3,8 +3,187 @@ openapi: 3.0.1
 info:
   title: Management API
   description: Management API for KIQR Headless CMS
-  version: 0.12.0
+  version: 0.13.0
 paths:
+  "/environments/{environment_id}/resources":
+    get:
+      summary: List resources for an environment
+      tags:
+      - Resources
+      operationId: getResources
+      security:
+      - oauth2: []
+      parameters:
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: number
+      - name: environment_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: content_type
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '401':
+          description: returns 401 forbidden if unauthenticated
+        '200':
+          description: filtered by content type
+          headers:
+            Current-Page:
+              schema:
+                type: integer
+            Page-Items:
+              schema:
+                type: integer
+            Total-Count:
+              schema:
+                type: integer
+            Total-Pages:
+              schema:
+                type: integer
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/Resource"
+    post:
+      summary: Create a resource
+      tags:
+      - Resources
+      operationId: createResource
+      security:
+      - oauth2: []
+      parameters:
+      - name: environment_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '401':
+          description: returns 401 forbidden if unauthenticated
+        '201':
+          description: create a resource
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Resource"
+        '422':
+          description: with validation errors
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                slug:
+                  type: string
+                content_type:
+                  type: string
+              required:
+              - name
+              - content_type
+        required: true
+  "/environments/{environment_id}/resources/{id}":
+    get:
+      summary: Get a resources
+      tags:
+      - Resources
+      operationId: getResource
+      security:
+      - oauth2: []
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: environment_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '401':
+          description: returns 401 forbidden if unauthenticated
+        '200':
+          description: returns a resource
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Resource"
+    patch:
+      summary: Update a resources
+      tags:
+      - Resources
+      operationId: updateResource
+      security:
+      - oauth2: []
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: environment_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '401':
+          description: returns 401 forbidden if unauthenticated
+        '200':
+          description: returns the updated resource
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Resource"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                slug:
+                  type: string
+                content:
+                  type: string
+              required: []
+    delete:
+      summary: Delete a resource
+      tags:
+      - Resources
+      operationId: deleteResource
+      security:
+      - oauth2: []
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: environment_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '401':
+          description: returns 401 forbidden if unauthenticated
+        '204':
+          description: delete a resource
   "/environments":
     get:
       summary: List the current user's available environments
@@ -24,133 +203,6 @@ paths:
                 type: array
                 items:
                   "$ref": "#/components/schemas/Environment"
-  "/projects/{project_id}/resources":
-    get:
-      summary: List resources
-      tags:
-      - Resources
-      operationId: getResources
-      security:
-      - oauth2: []
-      parameters:
-      - name: project_id
-        in: path
-        required: true
-        schema:
-          type: string
-      - name: environment_id
-        in: query
-        required: true
-        schema:
-          type: string
-      - name: content_type
-        in: query
-        required: true
-        schema:
-          type: string
-      responses:
-        '401':
-          description: returns 401 forbidden if unauthenticated
-        '200':
-          description: returns a list of resources
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  "$ref": "#/components/schemas/Resource"
-        '400':
-          description: missing content type
-    post:
-      summary: Create a resource
-      tags:
-      - Resources
-      operationId: createResource
-      security:
-      - oauth2: []
-      parameters:
-      - name: project_id
-        in: path
-        required: true
-        schema:
-          type: string
-      responses:
-        '401':
-          description: returns 401 forbidden if unauthenticated
-        '201':
-          description: with contents / meta fields
-          content:
-            application/json:
-              schema:
-                "$ref": "#/components/schemas/Resource"
-        '422':
-          description: with conflicting slug
-        '400':
-          description: with invalid project_id
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                name:
-                  type: string
-                slug:
-                  type: string
-                content_type:
-                  type: string
-                project_id:
-                  type: string
-                environment_id:
-                  type: string
-                content:
-                  type: object
-              required:
-              - name
-              - slug
-              - content_type
-              - project_id
-              - environment_id
-  "/projects/{project_id}/resources/{id}":
-    get:
-      summary: Get a resources
-      tags:
-      - Resources
-      operationId: getResource
-      security:
-      - oauth2: []
-      parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: string
-      - name: project_id
-        in: path
-        required: true
-        schema:
-          type: string
-      - name: environment_id
-        in: query
-        required: true
-        schema:
-          type: string
-      - name: content_type
-        in: query
-        required: true
-        schema:
-          type: string
-      responses:
-        '401':
-          description: returns 401 forbidden if unauthenticated
-        '200':
-          description: returns a resource
-          content:
-            application/json:
-              schema:
-                "$ref": "#/components/schemas/Resource"
-        '400':
-          description: missing content type
   "/projects/{project_id}/schemas":
     get:
       summary: List project schemas
@@ -618,8 +670,6 @@ components:
       - name
       - slug
       - content_type
-      - content_version
-      - contents_count
       - content
       - updated_at
       - created_at
@@ -645,17 +695,14 @@ components:
         content_type:
           type: string
           example: posts
-        content_version:
-          type: number
-          example: 1
-        contents_count:
-          type: number
-          example: 1
         content:
-          type: object
+          "$ref": "#/components/schemas/ResourceContent"
         updated_at:
           type: number
           example: 1661635065
         created_at:
           type: number
           example: 1661635065
+      additionalProperties: false
+    ResourceContent:
+      type: object
