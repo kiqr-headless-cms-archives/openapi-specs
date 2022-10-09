@@ -3,7 +3,7 @@ openapi: 3.0.1
 info:
   title: Management API
   description: Management API for KIQR Headless CMS
-  version: 0.13.0
+  version: 0.13.1
 paths:
   "/environments/{environment_id}/resources":
     get:
@@ -87,6 +87,8 @@ paths:
                   type: string
                 slug:
                   type: string
+                content:
+                  type: object
                 content_type:
                   type: string
               required:
@@ -159,7 +161,7 @@ paths:
                 slug:
                   type: string
                 content:
-                  type: string
+                  type: object
               required: []
     delete:
       summary: Delete a resource
