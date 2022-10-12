@@ -3,7 +3,7 @@ openapi: 3.0.1
 info:
   title: Management API
   description: Management API for KIQR Headless CMS
-  version: 0.13.1
+  version: 0.15.2
 paths:
   "/environments/{environment_id}/resources":
     get:
@@ -97,7 +97,7 @@ paths:
         required: true
   "/environments/{environment_id}/resources/{id}":
     get:
-      summary: Get a resources
+      summary: Get a resource
       tags:
       - Resources
       operationId: getResource
@@ -114,17 +114,22 @@ paths:
         required: true
         schema:
           type: string
+      - name: version
+        in: query
+        required: false
+        schema:
+          type: string
       responses:
         '401':
           description: returns 401 forbidden if unauthenticated
         '200':
-          description: returns a resource
+          description: returns an older version
           content:
             application/json:
               schema:
                 "$ref": "#/components/schemas/Resource"
     patch:
-      summary: Update a resources
+      summary: Update a resource
       tags:
       - Resources
       operationId: updateResource
@@ -186,6 +191,41 @@ paths:
           description: returns 401 forbidden if unauthenticated
         '204':
           description: delete a resource
+  "/environments/{environment_id}/resources/{id}/versions":
+    get:
+      summary: Get resource versions
+      tags:
+      - Resources
+      operationId: getResourceVersions
+      security:
+      - oauth2: []
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: environment_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: version
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '401':
+          description: returns 401 forbidden if unauthenticated
+        '200':
+          description: returns a list with resources
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/Resource"
   "/environments":
     get:
       summary: List the current user's available environments
@@ -673,6 +713,8 @@ components:
       - slug
       - content_type
       - content
+      - version
+      - versions_count
       - updated_at
       - created_at
       properties:
@@ -699,6 +741,12 @@ components:
           example: posts
         content:
           "$ref": "#/components/schemas/ResourceContent"
+        version:
+          type: number
+          example: 3
+        versions_count:
+          type: number
+          example: 3
         updated_at:
           type: number
           example: 1661635065
