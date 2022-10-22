@@ -3,7 +3,7 @@ openapi: 3.0.1
 info:
   title: Management API
   description: Management API for KIQR Headless CMS
-  version: 0.15.2
+  version: 0.16.0
 paths:
   "/environments/{environment_id}/resources":
     get:
@@ -34,25 +34,17 @@ paths:
           description: returns 401 forbidden if unauthenticated
         '200':
           description: filtered by content type
-          headers:
-            Current-Page:
-              schema:
-                type: integer
-            Page-Items:
-              schema:
-                type: integer
-            Total-Count:
-              schema:
-                type: integer
-            Total-Pages:
-              schema:
-                type: integer
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  "$ref": "#/components/schemas/Resource"
+                allOf:
+                - "$ref": "#/components/schemas/PaginatedResponse"
+                - type: object
+                  properties:
+                    results:
+                      type: array
+                      items:
+                        "$ref": "#/components/schemas/Resource"
     post:
       summary: Create a resource
       tags:
@@ -756,3 +748,37 @@ components:
       additionalProperties: false
     ResourceContent:
       type: object
+    PaginatedResponse:
+      type: object
+      required:
+      - results
+      - meta
+      properties:
+        results:
+          type: array
+          items: {}
+        meta:
+          type: object
+          required:
+          - pagination
+          properties:
+            pagination:
+              type: object
+              required:
+              - count
+              - page
+              - items
+              - pages
+              properties:
+                count:
+                  type: number
+                  example: 26
+                page:
+                  type: number
+                  example: 1
+                items:
+                  type: number
+                  example: 20
+                pages:
+                  type: number
+                  example: 2
