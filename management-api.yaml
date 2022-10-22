@@ -3,7 +3,7 @@ openapi: 3.0.1
 info:
   title: Management API
   description: Management API for KIQR Headless CMS
-  version: 0.16.0
+  version: 0.16.1
 paths:
   "/environments/{environment_id}/resources":
     get:
@@ -37,14 +37,7 @@ paths:
           content:
             application/json:
               schema:
-                allOf:
-                - "$ref": "#/components/schemas/PaginatedResponse"
-                - type: object
-                  properties:
-                    results:
-                      type: array
-                      items:
-                        "$ref": "#/components/schemas/Resource"
+                "$ref": "#/components/schemas/ResourcesResponse"
     post:
       summary: Create a resource
       tags:
@@ -748,7 +741,7 @@ components:
       additionalProperties: false
     ResourceContent:
       type: object
-    PaginatedResponse:
+    ResourcesResponse:
       type: object
       required:
       - results
@@ -756,29 +749,31 @@ components:
       properties:
         results:
           type: array
-          items: {}
+          items:
+            "$ref": "#/components/schemas/Resource"
         meta:
+          "$ref": "#/components/schemas/ResponseMeta"
+    ResponseMeta:
+      type: object
+      required: []
+      properties:
+        pagination:
           type: object
           required:
-          - pagination
+          - count
+          - page
+          - items
+          - pages
           properties:
-            pagination:
-              type: object
-              required:
-              - count
-              - page
-              - items
-              - pages
-              properties:
-                count:
-                  type: number
-                  example: 26
-                page:
-                  type: number
-                  example: 1
-                items:
-                  type: number
-                  example: 20
-                pages:
-                  type: number
-                  example: 2
+            count:
+              type: number
+              example: 26
+            page:
+              type: number
+              example: 1
+            items:
+              type: number
+              example: 20
+            pages:
+              type: number
+              example: 2
