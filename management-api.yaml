@@ -3,7 +3,7 @@ openapi: 3.0.1
 info:
   title: Management API
   description: Management API for KIQR Headless CMS
-  version: 0.16.1
+  version: 0.17.0
 paths:
   "/environments/{environment_id}/resources":
     get:
@@ -230,6 +230,59 @@ paths:
                 type: array
                 items:
                   "$ref": "#/components/schemas/Environment"
+  "/projects/{project_id}/environments":
+    get:
+      summary: List project environments
+      tags:
+      - Projects/Environments
+      operationId: getProjectEnvironments
+      security:
+      - oauth2: []
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '401':
+          description: returns 401 forbidden if unauthenticated
+        '200':
+          description: returns a list of environments
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  "$ref": "#/components/schemas/Environment"
+  "/projects/{project_id}/environments/{id}":
+    get:
+      summary: List project environment
+      tags:
+      - Projects/Environments
+      operationId: getProjectEnvironment
+      security:
+      - oauth2: []
+      parameters:
+      - name: project_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '401':
+          description: returns 401 forbidden if unauthenticated
+        '200':
+          description: returns an environment
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Environment"
   "/projects/{project_id}/schemas":
     get:
       summary: List project schemas
@@ -777,3 +830,9 @@ components:
             pages:
               type: number
               example: 2
+            from:
+              type: number
+              example: 21
+            to:
+              type: number
+              example: 26
