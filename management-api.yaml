@@ -3,7 +3,7 @@ openapi: 3.0.1
 info:
   title: Management API
   description: Management API for KIQR Headless CMS
-  version: 0.21.0
+  version: 0.21.1
 paths:
   "/environments/{environment_id}/resources":
     get:
@@ -337,7 +337,7 @@ paths:
         '409':
           description: with conflicting version number
         '422':
-          description: with invalid field
+          description: with invalid kind
       requestBody:
         content:
           application/json:
@@ -710,15 +710,8 @@ components:
           type: boolean
         required:
           type: boolean
-      anyOf:
-      - required:
-        - id
-        - label
-        - type
-        - required
-      - required:
-        - id
-        - component
+      required:
+      - id
       additionalProperties: false
     Component:
       type: object
