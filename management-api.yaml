@@ -3,7 +3,7 @@ openapi: 3.0.1
 info:
   title: Management API
   description: Management API for KIQR Headless CMS
-  version: 0.20.0
+  version: 0.21.0
 paths:
   "/environments/{environment_id}/resources":
     get:
@@ -692,6 +692,10 @@ components:
           type: string
           minLength: 3
           maxLength: 30
+        component:
+          type: string
+          minLength: 3
+          maxLength: 30
         label:
           type: string
           minLength: 3
@@ -702,13 +706,19 @@ components:
           - string
           - text
           - editor
+        repeatable:
+          type: boolean
         required:
           type: boolean
-      required:
-      - id
-      - label
-      - type
-      - required
+      anyOf:
+      - required:
+        - id
+        - label
+        - type
+        - required
+      - required:
+        - id
+        - component
       additionalProperties: false
     Component:
       type: object
@@ -721,10 +731,6 @@ components:
           type: string
           minLength: 3
           maxLength: 30
-        tabName:
-          type: string
-          minLength: 3
-          maxLength: 30
         fields:
           type: array
           items:
@@ -732,7 +738,6 @@ components:
       required:
       - id
       - name
-      - tabName
       - fields
       additionalProperties: false
     Environment:
