@@ -3,7 +3,7 @@ openapi: 3.0.1
 info:
   title: Management API
   description: Management API for KIQR Headless CMS
-  version: 0.19.0
+  version: 0.20.0
 paths:
   "/environments/{environment_id}/resources":
     get:
@@ -624,10 +624,10 @@ components:
           type: array
           items:
             "$ref": "#/components/schemas/ContentType"
-        plugins:
+        components:
           type: array
           items:
-            "$ref": "#/components/schemas/Plugin"
+            "$ref": "#/components/schemas/Component"
       required:
       - content_types
     ContentType:
@@ -645,7 +645,7 @@ components:
           type: string
           enum:
           - collection
-          - component
+          - single
         associations:
           type: array
           items:
@@ -654,7 +654,7 @@ components:
           type: array
           items:
             "$ref": "#/components/schemas/ContentTypeField"
-        plugins:
+        components:
           type: array
           items:
             type: string
@@ -710,7 +710,7 @@ components:
       - type
       - required
       additionalProperties: false
-    Plugin:
+    Component:
       type: object
       properties:
         id:
