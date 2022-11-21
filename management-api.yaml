@@ -3,7 +3,7 @@ openapi: 3.0.1
 info:
   title: Management API
   description: Management API for KIQR Headless CMS
-  version: 0.22.0
+  version: 0.23.0
 paths:
   "/environments/{environment_id}/resources":
     get:
@@ -30,8 +30,6 @@ paths:
         schema:
           type: string
       responses:
-        '401':
-          description: returns 401 forbidden if unauthenticated
         '200':
           description: filtered by content type
           content:
@@ -52,8 +50,6 @@ paths:
         schema:
           type: string
       responses:
-        '401':
-          description: returns 401 forbidden if unauthenticated
         '201':
           description: create a resource
           content:
@@ -105,8 +101,6 @@ paths:
         schema:
           type: string
       responses:
-        '401':
-          description: returns 401 forbidden if unauthenticated
         '200':
           description: returns an older version
           content:
@@ -132,8 +126,6 @@ paths:
         schema:
           type: string
       responses:
-        '401':
-          description: returns 401 forbidden if unauthenticated
         '200':
           description: returns the updated resource
           content:
@@ -172,8 +164,6 @@ paths:
         schema:
           type: string
       responses:
-        '401':
-          description: returns 401 forbidden if unauthenticated
         '204':
           description: delete a resource
   "/environments/{environment_id}/resources/{id}/versions":
@@ -201,8 +191,6 @@ paths:
         schema:
           type: string
       responses:
-        '401':
-          description: returns 401 forbidden if unauthenticated
         '200':
           description: returns a list with resources
           content:
@@ -220,8 +208,6 @@ paths:
       security:
       - oauth2: []
       responses:
-        '401':
-          description: returns 401 forbidden if unauthenticated
         '200':
           description: returns a list of environments
           content:
@@ -245,8 +231,6 @@ paths:
         schema:
           type: string
       responses:
-        '401':
-          description: returns 401 forbidden if unauthenticated
         '200':
           description: returns a list of environments
           content:
@@ -275,8 +259,6 @@ paths:
         schema:
           type: string
       responses:
-        '401':
-          description: returns 401 forbidden if unauthenticated
         '200':
           description: returns an environment
           content:
@@ -298,8 +280,6 @@ paths:
         schema:
           type: string
       responses:
-        '401':
-          description: returns 401 forbidden if unauthenticated
         '200':
           description: returns a list of schemas
           content:
@@ -326,8 +306,6 @@ paths:
         schema:
           type: string
       responses:
-        '401':
-          description: returns 401 forbidden if unauthenticated
         '201':
           description: with empty content types
           content:
@@ -371,8 +349,6 @@ paths:
         schema:
           type: string
       responses:
-        '401':
-          description: returns 401 forbidden if unauthenticated
         '200':
           description: get by ID
           content:
@@ -388,8 +364,6 @@ paths:
       security:
       - oauth2: []
       responses:
-        '401':
-          description: returns 401 forbidden if unauthenticated
         '200':
           description: returns a list of projects
           content:
@@ -407,8 +381,6 @@ paths:
       - oauth2: []
       parameters: []
       responses:
-        '401':
-          description: returns 401 forbidden if unauthenticated
         '201':
           description: returns a project
           content:
@@ -442,8 +414,6 @@ paths:
         schema:
           type: string
       responses:
-        '401':
-          description: returns 401 forbidden if unauthenticated
         '200':
           description: get by SLUG
           content:
@@ -459,8 +429,6 @@ paths:
       - oauth2: []
       operationId: getUser
       responses:
-        '401':
-          description: returns 401 forbidden if unauthenticated
         '200':
           description: returns the current authenticated user
           content:
