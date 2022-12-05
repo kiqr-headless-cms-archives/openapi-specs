@@ -1,0 +1,138 @@
+---
+openapi: 3.0.1
+info:
+  title: Content API
+  description: Content API for KIQR Headless CMS
+  version: 0.0.0
+paths:
+  "/resources":
+    get:
+      summary: List resources
+      tags:
+      - Resources
+      operationId: getResources
+      parameters:
+      - name: api_key
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: number
+      - name: content_type
+        in: query
+        required: false
+        schema:
+          type: string
+      security:
+      - ApiKeyAuth: []
+      responses:
+        '401':
+          description: unauthenticated
+        '200':
+          description: resources scoped by content_type
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ResourcesResponse"
+servers:
+- url: https://content-api.kiqr.cloud/v1
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      name: api_key
+      in: query
+  schemas:
+    Resource:
+      type: object
+      required:
+      - id
+      - environment_id
+      - record_id
+      - locale
+      - name
+      - slug
+      - content_type
+      - updated_at
+      - created_at
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 623f2caa-7f30-4f17-ae85-43fb100538da
+        environment_id:
+          type: string
+          format: uuid
+          example: 851318d9-e3b6-40fb-80e9-e76b57057af0
+        record_id:
+          type: string
+          format: "^\\d{3}-\\d{2}-\\d{4}$"
+          example: f81eff05-9cc0-49dc-9e8c-1d3f55500a50
+        locale:
+          type: string
+          example: en
+        name:
+          type: string
+          example: My first post
+        slug:
+          type: string
+          example: my-first-post
+        content:
+          type: object
+        content_type:
+          type: string
+          example: posts
+        updated_at:
+          type: number
+          example: 1661635065
+        created_at:
+          type: number
+          example: 1661635065
+      additionalProperties: false
+    ResourcesResponse:
+      type: object
+      required:
+      - data
+      - meta
+      properties:
+        data:
+          type: array
+          items:
+            "$ref": "#/components/schemas/Resource"
+        meta:
+          type: object
+          required:
+          - pagination
+          properties:
+            pagination:
+              type: object
+              required:
+              - count
+              - page
+              - items
+              - pages
+              - from
+              - to
+              properties:
+                count:
+                  type: number
+                  example: 32
+                page:
+                  type: number
+                  example: 1
+                items:
+                  type: number
+                  example: 20
+                pages:
+                  type: number
+                  example: 2
+                from:
+                  type: number
+                  example: 21
+                to:
+                  type: number
+                  example: 26
