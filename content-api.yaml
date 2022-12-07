@@ -3,7 +3,7 @@ openapi: 3.0.1
 info:
   title: Content API
   description: Content API for KIQR Headless CMS
-  version: 0.0.0
+  version: 0.2.0
 paths:
   "/resources":
     get:
@@ -12,32 +12,30 @@ paths:
       - Resources
       operationId: getResources
       parameters:
-      - name: api_key
-        in: query
-        required: false
-        schema:
-          type: string
       - name: page
         in: query
         required: false
         schema:
           type: number
+      - name: api_key
+        in: query
+        required: true
+        schema:
+          type: string
       - name: content_type
         in: query
         required: false
         schema:
           type: string
-      security:
-      - ApiKeyAuth: []
       responses:
-        '401':
-          description: unauthenticated
         '200':
           description: resources scoped by content_type
           content:
             application/json:
               schema:
                 "$ref": "#/components/schemas/ResourcesResponse"
+        '401':
+          description: unauthorized
 servers:
 - url: https://content-api.kiqr.cloud/v1
 components:
@@ -63,14 +61,14 @@ components:
         id:
           type: string
           format: uuid
-          example: 623f2caa-7f30-4f17-ae85-43fb100538da
+          example: 1a279ed7-2a60-4281-bb70-707d6cf5d393
         environment_id:
           type: string
           format: uuid
           example: 851318d9-e3b6-40fb-80e9-e76b57057af0
         record_id:
           type: string
-          format: "^\\d{3}-\\d{2}-\\d{4}$"
+          format: uuid
           example: f81eff05-9cc0-49dc-9e8c-1d3f55500a50
         locale:
           type: string
