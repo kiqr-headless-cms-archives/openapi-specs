@@ -3,7 +3,7 @@ openapi: 3.0.1
 info:
   title: Content API
   description: Content API for KIQR Headless CMS
-  version: 0.3.4
+  version: 0.3.5
 paths:
   "/resources":
     get:
@@ -115,11 +115,13 @@ components:
           type: string
           example: posts
         updated_at:
-          type: number
-          example: 1661635065
+          type: string
+          format: datetime
+          example: '2021-01-30T08:30:00Z'
         created_at:
-          type: number
-          example: 1661635065
+          type: string
+          format: datetime
+          example: '2021-01-30T08:30:00Z'
       additionalProperties: false
     ResourcesResponse:
       type: object
