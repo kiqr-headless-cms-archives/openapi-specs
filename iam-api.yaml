@@ -1,0 +1,55 @@
+---
+openapi: 3.0.1
+info:
+  title: IAM API
+  description: Identity and access management api for KIQR
+  version: 0.0.0
+paths:
+  "/me":
+    get:
+      summary: Retrieve current user information
+      tags:
+      - Account
+      security:
+      - oauth2: []
+      operationId: getUserinfo
+      responses:
+        '200':
+          description: returns an account
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Account"
+servers:
+- url: https://iam.kiqr.cloud/v1
+components:
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      flows:
+        implicit:
+          authorizationUrl: https://kiqr.eu.auth0.com/authorize?audience=https://iam.kiqr.cloud/
+          clientId: K5h6zxThq1Nmhw7pzh9wwE4UMqo8I6Fb
+          scopes:
+            openid: OpenID Connect (OIDC)
+            profile: Access user profile
+  schemas:
+    Account:
+      type: object
+      required:
+      - id
+      - email
+      - created_at
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 1a279ed7-2a60-4281-bb70-707d6cf5d393
+        email:
+          type: string
+          example: david.specimen@example.com
+        created_at:
+          type: string
+          format: datetime
+          example: '2021-01-30T08:30:00Z'
+      additionalProperties: false
