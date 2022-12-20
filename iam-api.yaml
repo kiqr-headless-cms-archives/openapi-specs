@@ -3,7 +3,7 @@ openapi: 3.0.1
 info:
   title: IAM API
   description: Identity and access management api for KIQR
-  version: 0.0.1
+  version: 0.0.2
   contact:
     url: https://kiqr.dev
 paths:
