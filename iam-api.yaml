@@ -4,52 +4,327 @@ info:
   title: IAM API
   description: Identity and access management api for KIQR
   version: 0.0.1
+  contact:
+    url: https://kiqr.dev
 paths:
-  "/me":
+  "/organizations":
     get:
-      summary: Retrieve current user information
+      summary: Retrieve organizations
       tags:
-      - Account
+      - Organizations
       security:
       - oauth2: []
-      operationId: getUserinfo
+      parameters:
+      - name: Authorization
+        in: header
+        schema:
+          type: string
+      operationId: getOrganizations
+      description: List organizations
       responses:
         '200':
-          description: returns an account
+          description: get organizations
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OrganizationsResponse"
+  "/permissions":
+    get:
+      summary: Retrieve permissions
+      tags:
+      - Permissions
+      security:
+      - oauth2: []
+      parameters:
+      - name: Authorization
+        in: header
+        schema:
+          type: string
+      operationId: getPermissions
+      description: List permissions
+      responses:
+        '200':
+          description: get permissions
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/PermissionsResponse"
+  "/projects":
+    get:
+      summary: Retrieve projects
+      tags:
+      - Projects
+      security:
+      - oauth2: []
+      parameters:
+      - name: Authorization
+        in: header
+        schema:
+          type: string
+      operationId: getProjects
+      description: List projects
+      responses:
+        '200':
+          description: get projects
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ProjectsResponse"
+  "/me":
+    get:
+      summary: Retrieve user information
+      tags:
+      - User
+      security:
+      - oauth2: []
+      parameters:
+      - name: Authorization
+        in: header
+        schema:
+          type: string
+      operationId: getAccount
+      description: Returns info about the current authenticated in user.
+      responses:
+        '200':
+          description: without "email" scope
           content:
             application/json:
               schema:
                 "$ref": "#/components/schemas/Account"
 servers:
 - url: https://iam.kiqr.cloud/v1
+tags:
+- name: User
+- name: Organizations
+- name: Permissions
+- name: Projects
 components:
   securitySchemes:
     oauth2:
       type: oauth2
       flows:
-        implicit:
-          authorizationUrl: https://kiqr.eu.auth0.com/authorize?audience=https://iam.kiqr.cloud/
-          clientId: K5h6zxThq1Nmhw7pzh9wwE4UMqo8I6Fb
+        authorizationCode:
+          authorizationUrl: https://id.kiqr.cloud/oauth/authorize
+          tokenUrl: https://id.kiqr.cloud/oauth/token
           scopes:
-            openid: OpenID Connect (OIDC)
-            profile: Access user profile
+            profile: Access profile
+            email: Access email
+            organizations: Full access to organizations
+            projects: Full access to projects
   schemas:
     Account:
       type: object
       required:
       - id
-      - email
+      - name
+      properties:
+        id:
+          type: string
+          example: user_G8qrAjeMYvyPeHG14dRPg3wW
+        name:
+          type: string
+          example: David Specimen
+        email:
+          type: string
+          example: david.specimen@example.com
+          nullable: true
+      additionalProperties: false
+    Organization:
+      type: object
+      required:
+      - id
+      - name
+      - updated_at
       - created_at
       properties:
         id:
           type: string
-          format: uuid
-          example: 1a279ed7-2a60-4281-bb70-707d6cf5d393
-        email:
+          example: org_egJxkzOW8KmqNtWKo124b0Xq
+        name:
           type: string
-          example: david.specimen@example.com
+          example: My organization
+        updated_at:
+          type: string
+          format: datetime
+          example: '2021-01-30T08:30:00Z'
         created_at:
           type: string
           format: datetime
           example: '2021-01-30T08:30:00Z'
       additionalProperties: false
+    OrganizationsResponse:
+      type: object
+      required:
+      - organizations
+      - meta
+      additionalProperties: false
+      properties:
+        organizations:
+          type: array
+          items:
+            "$ref": "#/components/schemas/Organization"
+        meta:
+          type: object
+          required:
+          - pagination
+          properties:
+            pagination:
+              type: object
+              required:
+              - count
+              - page
+              - items
+              - pages
+              - from
+              - to
+              properties:
+                count:
+                  type: number
+                  example: 32
+                page:
+                  type: number
+                  example: 1
+                items:
+                  type: number
+                  example: 20
+                pages:
+                  type: number
+                  example: 2
+                from:
+                  type: number
+                  example: 21
+                to:
+                  type: number
+                  example: 26
+    Permission:
+      type: object
+      required:
+      - resource
+      - account
+      - role
+      properties:
+        resource:
+          type: string
+          example: org_egJxkzOW8KmqNtWKo124b0Xq
+        account:
+          type: string
+          example: user_G8qrAjeMYvyPeHG14dRPg3wW
+        role:
+          type: string
+          example: owner
+      additionalProperties: false
+    PermissionsResponse:
+      type: object
+      required:
+      - permissions
+      - meta
+      additionalProperties: false
+      properties:
+        permissions:
+          type: array
+          items:
+            "$ref": "#/components/schemas/Permission"
+        meta:
+          type: object
+          required:
+          - pagination
+          properties:
+            pagination:
+              type: object
+              required:
+              - count
+              - page
+              - items
+              - pages
+              - from
+              - to
+              properties:
+                count:
+                  type: number
+                  example: 32
+                page:
+                  type: number
+                  example: 1
+                items:
+                  type: number
+                  example: 20
+                pages:
+                  type: number
+                  example: 2
+                from:
+                  type: number
+                  example: 21
+                to:
+                  type: number
+                  example: 26
+    Project:
+      type: object
+      required:
+      - id
+      - organization
+      - name
+      - updated_at
+      - created_at
+      properties:
+        id:
+          type: string
+          example: proj_60QO9lVegnOjbTAmZ3PBGqRX
+        organization:
+          type: string
+          example: org_egJxkzOW8KmqNtWKo124b0Xq
+        name:
+          type: string
+          example: My project
+        updated_at:
+          type: string
+          format: datetime
+          example: '2021-01-30T08:30:00Z'
+        created_at:
+          type: string
+          format: datetime
+          example: '2021-01-30T08:30:00Z'
+      additionalProperties: false
+    ProjectsResponse:
+      type: object
+      required:
+      - projects
+      - meta
+      additionalProperties: false
+      properties:
+        projects:
+          type: array
+          items:
+            "$ref": "#/components/schemas/Project"
+        meta:
+          type: object
+          required:
+          - pagination
+          properties:
+            pagination:
+              type: object
+              required:
+              - count
+              - page
+              - items
+              - pages
+              - from
+              - to
+              properties:
+                count:
+                  type: number
+                  example: 32
+                page:
+                  type: number
+                  example: 1
+                items:
+                  type: number
+                  example: 20
+                pages:
+                  type: number
+                  example: 2
+                from:
+                  type: number
+                  example: 21
+                to:
+                  type: number
+                  example: 26
