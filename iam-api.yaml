@@ -3,13 +3,13 @@ openapi: 3.0.1
 info:
   title: IAM API
   description: Identity and access management api for KIQR
-  version: 0.0.2
+  version: 0.1.0
   contact:
     url: https://kiqr.dev
 paths:
   "/organizations":
     get:
-      summary: Retrieve organizations
+      summary: Retrieve a list of organizations
       tags:
       - Organizations
       security:
@@ -28,6 +28,38 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/OrganizationsResponse"
+    post:
+      summary: Create an organization
+      tags:
+      - Organizations
+      operationId: createOrganization
+      security:
+      - oauth2: []
+      parameters:
+      - name: Authorization
+        in: header
+        schema:
+          type: string
+      responses:
+        '201':
+          description: returns an organization
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Organization"
+        '422':
+          description: validation failed
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: My Organization
+              required:
+              - name
   "/permissions":
     get:
       summary: Retrieve permissions
