@@ -3,7 +3,7 @@ openapi: 3.0.1
 info:
   title: IAM API
   description: Identity and access management api for KIQR
-  version: 0.1.0
+  version: 0.2.0
   contact:
     url: https://kiqr.dev
 paths:
@@ -102,6 +102,43 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/ProjectsResponse"
+    post:
+      summary: Create a project
+      tags:
+      - Projects
+      operationId: createProject
+      security:
+      - oauth2: []
+      parameters:
+      - name: Authorization
+        in: header
+        schema:
+          type: string
+      - name: organization_id
+        in: query
+        example: org_egJxkzOW8KmqNtWKo124b0Xq
+        schema:
+          type: string
+      responses:
+        '201':
+          description: returns a project
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Project"
+        '422':
+          description: validation failed
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: My Project
+              required:
+              - name
   "/me":
     get:
       summary: Retrieve user information
@@ -231,14 +268,14 @@ components:
     Permission:
       type: object
       required:
-      - resource
-      - account
+      - resource_id
+      - account_id
       - role
       properties:
-        resource:
+        resource_id:
           type: string
           example: org_egJxkzOW8KmqNtWKo124b0Xq
-        account:
+        account_id:
           type: string
           example: user_G8qrAjeMYvyPeHG14dRPg3wW
         role:
@@ -293,7 +330,7 @@ components:
       type: object
       required:
       - id
-      - organization
+      - organization_id
       - name
       - updated_at
       - created_at
@@ -301,7 +338,7 @@ components:
         id:
           type: string
           example: proj_60QO9lVegnOjbTAmZ3PBGqRX
-        organization:
+        organization_id:
           type: string
           example: org_egJxkzOW8KmqNtWKo124b0Xq
         name:
