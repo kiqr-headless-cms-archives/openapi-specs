@@ -1,0 +1,68 @@
+---
+openapi: 3.0.1
+info:
+  title: KIQR API
+  description: CORE API for KIQR HEADLESS CMS
+  version: 0.0.0
+  contact:
+    url: https://kiqr.cloud
+paths:
+  "/users/me":
+    get:
+      summary: Retrieve user information
+      tags:
+      - User
+      security:
+      - oauth2: []
+      parameters:
+      - name: Authorization
+        in: header
+        schema:
+          type: string
+      operationId: getUserinfo
+      description: Returns info about the current signed in user.
+      responses:
+        '200':
+          description: Get current user's profile
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/User"
+servers:
+- url: https://api.kiqr.cloud/v1
+tags:
+- name: User
+components:
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://kiqr.eu.auth0.com/authorize?audience=https://api.kiqr.cloud/
+          tokenUrl: https://kiqr.eu.auth0.com/oauth/token
+          scopes:
+            openid: Sign in via third-party
+            email: Access email
+            profile: Access profile
+            organizations: Full access to organizations
+            projects: Full access to projects
+  schemas:
+    User:
+      type: object
+      required:
+      - id
+      - email
+      properties:
+        id:
+          type: string
+          example: user_G8qrAjeMYvyPeHG14dRPg3wW
+        email:
+          type: string
+          example: david.specimen@example.com
+        updated_at:
+          type: string
+          example: '2022-12-26T17:47:24.285Z'
+        created_at:
+          type: string
+          example: '2022-12-26T17:47:24.285Z'
+      additionalProperties: false
