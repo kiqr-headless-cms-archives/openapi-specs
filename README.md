@@ -2,8 +2,7 @@ OpenAPI specifications for KIQR.CLOUD
 -------------------------------------
 This repository hosts our latest official OpenAPI specifications for all available KIQR.CLOUD api's:
 
-- Content API - [yaml](https://raw.githubusercontent.com/kiqr/openapi-specs/main/content-api.yaml) / [docs](https://kiqr.dev/docs/apis/content-api/)
-- Management API -  [yaml](https://raw.githubusercontent.com/kiqr/openapi-specs/main/management-api.yaml) / [docs](https://kiqr.dev/docs/apis/management-api/)
+- Core API - [yaml](https://raw.githubusercontent.com/kiqr/openapi-specs/main/core-api.yaml) / [docs](https://kiqr.dev/docs/apis/core-api/)
 
 The main branch is **automatically updated** every patch/release of an API and can therefore be considered the source of truth. 
 
