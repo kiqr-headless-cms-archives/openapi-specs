@@ -3,7 +3,7 @@ openapi: 3.0.1
 info:
   title: Core API
   description: Core API for KIQR Headless CMS
-  version: 0.5.0
+  version: 0.5.1
 paths:
   "/":
     get:
@@ -38,11 +38,11 @@ paths:
         BearerAuth: []
       responses:
         '401':
-          description: Missing or invalid token
+          description: Missing AppId
           content:
             application/json:
               schema:
-                "$ref": "#/components/responses/InvalidTokenError"
+                "$ref": "#/components/responses/InvalidAppIdError"
         '200':
           description: Returns tokeninfo
           content:
@@ -135,6 +135,8 @@ components:
           example: '2023-01-17T09:36:08Z'
       additionalProperties: false
   responses:
+    InvalidAppIdError:
+      description: Missing or invalid AppId
     InvalidTokenError:
       description: Missing or invalid token
     TokenInfoResponse:
