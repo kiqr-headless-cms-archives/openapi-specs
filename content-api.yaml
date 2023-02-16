@@ -3,7 +3,7 @@ openapi: 3.0.1
 info:
   title: Content API
   description: Content API for KIQR Headless CMS
-  version: 0.3.0
+  version: 0.4.0
 paths:
   "/":
     get:
@@ -27,14 +27,81 @@ paths:
                   engineVersion:
                     type: string
                     example: 1.0.0
+  "/{content_type_slug}/":
+    get:
+      summary: Returns documents by content type
+      tags:
+      - Documents
+      operationId: getDocuments
+      security:
+      - environmentId: {}
+      parameters:
+      - name: content_type_slug
+        in: path
+        example: posts
+        required: true
+        schema:
+          type: string
+      responses:
+        '401':
+          description: Query parameter environment_id is missing or invalid
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/responses/InvalidEnvironmentError"
+        '200':
+          description: Returns a list of documents
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/DocumentsResponse"
+  "/{content_type_slug}/{document_slug}":
+    get:
+      summary: Returns a document
+      tags:
+      - Documents
+      operationId: getDocument
+      security:
+      - environmentId: {}
+      parameters:
+      - name: content_type_slug
+        in: path
+        example: posts
+        required: true
+        schema:
+          type: string
+      - name: document_slug
+        in: path
+        example: doc_LMxzy1KnBRQKxFyZ0aGNdqp5
+        required: true
+        schema:
+          type: string
+      responses:
+        '401':
+          description: Query parameter environment_id is missing or invalid
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/responses/InvalidEnvironmentError"
+        '200':
+          description: Returns a document
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Document"
 servers:
 - url: https://content.kiqr.cloud/v1
 components:
   securitySchemes:
-    bearerAuth:
-      type: http
-      scheme: bearer
-      bearerFormat: JWT
+    environmentId:
+      type: apiKey
+      name: environment_id
+      in: query
+  responses:
+    UnauthorizedError:
+      description: Access token is missing or invalid
+    InvalidEnvironmentError:
+      description: Query parameter environment_id is missing or invalid
   schemas:
     Document:
       type: object
@@ -70,7 +137,50 @@ components:
           format: date-time
           example: '2023-01-17T09:36:08Z'
       additionalProperties: false
+    DocumentsResponse:
+      type: object
+      required:
+      - documents
+      - meta
+      properties:
+        results:
+          type: array
+          items:
+            "$ref": "#/components/schemas/DocumentContent"
+        meta:
+          type: object
+          required:
+          - pagination
+          properties:
+            pagination:
+              "$ref": "#/components/schemas/PaginationMeta"
     DocumentContent:
       type: object
     DocumentRelation:
       type: object
+    PaginationMeta:
+      type: object
+      required:
+      - count
+      - page
+      - items
+      - pages
+      properties:
+        count:
+          type: number
+          example: 26
+        page:
+          type: number
+          example: 1
+        items:
+          type: number
+          example: 20
+        pages:
+          type: number
+          example: 2
+        from:
+          type: number
+          example: 21
+        to:
+          type: number
+          example: 26
