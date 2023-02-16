@@ -1,0 +1,76 @@
+---
+openapi: 3.0.1
+info:
+  title: Content API
+  description: Content API for KIQR Headless CMS
+  version: 0.3.0
+paths:
+  "/":
+    get:
+      summary: Welcome message
+      tags:
+      - Welcome
+      responses:
+        '200':
+          description: Returns a welcome message
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    example: KIQR Content API
+                  apiVersion:
+                    type: integer
+                    example: 1
+                  engineVersion:
+                    type: string
+                    example: 1.0.0
+servers:
+- url: https://content.kiqr.cloud/v1
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    Document:
+      type: object
+      required:
+      - id
+      - name
+      - slug
+      - content
+      - updated_at
+      - created_at
+      properties:
+        id:
+          type: string
+          example: doc_LMxzy1KnBRQKxFyZ0aGNdqp5
+        name:
+          type: string
+          example: My first post
+        slug:
+          type: string
+          example: my-first-post
+        content:
+          "$ref": "#/components/schemas/DocumentContent"
+        relations:
+          type: object
+          additionalProperties:
+            "$ref": "#/components/schemas/DocumentRelation"
+        updated_at:
+          type: string
+          format: date-time
+          example: 023-02-13T18:57:03Z
+        created_at:
+          type: string
+          format: date-time
+          example: '2023-01-17T09:36:08Z'
+      additionalProperties: false
+    DocumentContent:
+      type: object
+    DocumentRelation:
+      type: object
