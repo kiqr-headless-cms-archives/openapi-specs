@@ -3,7 +3,7 @@ openapi: 3.0.1
 info:
   title: Content API
   description: Content API for KIQR Headless CMS
-  version: 0.4.0
+  version: 0.5.0
 paths:
   "/":
     get:
@@ -34,7 +34,7 @@ paths:
       - Documents
       operationId: getDocuments
       security:
-      - environmentId: {}
+      - environmentId: []
       parameters:
       - name: content_type_slug
         in: path
@@ -62,7 +62,7 @@ paths:
       - Documents
       operationId: getDocument
       security:
-      - environmentId: {}
+      - environmentId: []
       parameters:
       - name: content_type_slug
         in: path

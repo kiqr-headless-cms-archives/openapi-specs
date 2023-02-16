@@ -3,7 +3,7 @@ openapi: 3.0.1
 info:
   title: Core API
   description: Core API for KIQR Headless CMS
-  version: 0.4.0
+  version: 0.5.0
 paths:
   "/":
     get:
@@ -27,12 +27,126 @@ paths:
                   engineVersion:
                     type: string
                     example: 1.0.0
+  "/tokeninfo":
+    get:
+      summary: Returns current user, project and environment.
+      tags:
+      - Authentication
+      operationId: getTokenInfo
+      security:
+      - AppId: []
+        BearerAuth: []
+      responses:
+        '401':
+          description: Missing or invalid token
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/responses/InvalidTokenError"
+        '200':
+          description: Returns tokeninfo
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/responses/TokenInfoResponse"
 servers:
 - url: https://api.kiqr.cloud/v1
 components:
   securitySchemes:
-    bearerAuth:
+    AppId:
+      type: apiKey
+      name: AppId
+      in: header
+    BearerAuth:
       type: http
       scheme: bearer
       bearerFormat: JWT
-  schemas: {}
+  schemas:
+    User:
+      type: object
+      required:
+      - id
+      - name
+      - updated_at
+      - created_at
+      properties:
+        id:
+          type: string
+          example: user_zWNY2gOL1xwrYuRqXQnjJZyP
+        name:
+          type: string
+          example: David Specimen
+        updated_at:
+          type: string
+          format: date-time
+          example: 023-02-13T18:57:03Z
+        created_at:
+          type: string
+          format: date-time
+          example: '2023-01-17T09:36:08Z'
+      additionalProperties: false
+    Environment:
+      type: object
+      required:
+      - id
+      - name
+      - updated_at
+      - created_at
+      properties:
+        id:
+          type: string
+          example: env_RKGOXN3jqMznkC0MDBz1yLr2
+        name:
+          type: string
+          example: main
+        environment_type:
+          type: string
+          example: development
+        updated_at:
+          type: string
+          format: date-time
+          example: 023-02-13T18:57:03Z
+        created_at:
+          type: string
+          format: date-time
+          example: '2023-01-17T09:36:08Z'
+      additionalProperties: false
+    Project:
+      type: object
+      required:
+      - id
+      - name
+      - updated_at
+      - created_at
+      properties:
+        id:
+          type: string
+          example: my-project-name
+        name:
+          type: string
+          example: My project name
+        updated_at:
+          type: string
+          format: date-time
+          example: 023-02-13T18:57:03Z
+        created_at:
+          type: string
+          format: date-time
+          example: '2023-01-17T09:36:08Z'
+      additionalProperties: false
+  responses:
+    InvalidTokenError:
+      description: Missing or invalid token
+    TokenInfoResponse:
+      type: object
+      required:
+      - environment
+      - project
+      - user
+      properties:
+        environment:
+          "$ref": "#/components/schemas/Environment"
+        project:
+          "$ref": "#/components/schemas/Project"
+        user:
+          "$ref": "#/components/schemas/User"
