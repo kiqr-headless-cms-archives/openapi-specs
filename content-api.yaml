@@ -3,7 +3,7 @@ openapi: 3.0.1
 info:
   title: Content API
   description: Content API for KIQR Headless CMS
-  version: 0.6.1
+  version: 0.6.2
 paths:
   "/{content_type_slug}/":
     get:
