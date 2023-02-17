@@ -5,28 +5,6 @@ info:
   description: Content API for KIQR Headless CMS
   version: 0.5.1
 paths:
-  "/":
-    get:
-      summary: Welcome message
-      tags:
-      - Welcome
-      responses:
-        '200':
-          description: Returns a welcome message
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  name:
-                    type: string
-                    example: KIQR Content API
-                  apiVersion:
-                    type: integer
-                    example: 1
-                  engineVersion:
-                    type: string
-                    example: 1.0.0
   "/{content_type_slug}/":
     get:
       summary: Returns documents by content type
@@ -45,16 +23,12 @@ paths:
       responses:
         '401':
           description: Query parameter environment_id is missing or invalid
-          content:
-            application/json:
-              schema:
-                "$ref": "#/components/responses/InvalidEnvironmentError"
         '200':
           description: Returns a list of documents
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/DocumentsResponse"
+                "$ref": "#/components/schemas/DocumentsCollection"
   "/{content_type_slug}/{document_slug}":
     get:
       summary: Returns a document
@@ -79,10 +53,6 @@ paths:
       responses:
         '401':
           description: Query parameter environment_id is missing or invalid
-          content:
-            application/json:
-              schema:
-                "$ref": "#/components/responses/InvalidEnvironmentError"
         '200':
           description: Returns a document
           content:
@@ -97,11 +67,6 @@ components:
       type: apiKey
       name: environment_id
       in: query
-  responses:
-    UnauthorizedError:
-      description: Access token is missing or invalid
-    InvalidEnvironmentError:
-      description: Query parameter environment_id is missing or invalid
   schemas:
     Document:
       type: object
@@ -112,6 +77,7 @@ components:
       - content
       - updated_at
       - created_at
+      additionalProperties: false
       properties:
         id:
           type: string
@@ -123,11 +89,13 @@ components:
           type: string
           example: my-first-post
         content:
-          "$ref": "#/components/schemas/DocumentContent"
+          type: object
+          additionalProperties:
+            type: string
         relations:
           type: object
           additionalProperties:
-            "$ref": "#/components/schemas/DocumentRelation"
+            type: object
         updated_at:
           type: string
           format: date-time
@@ -136,17 +104,16 @@ components:
           type: string
           format: date-time
           example: '2023-01-17T09:36:08Z'
-      additionalProperties: false
-    DocumentsResponse:
+    DocumentsCollection:
       type: object
       required:
       - documents
       - meta
       properties:
-        results:
+        documents:
           type: array
           items:
-            "$ref": "#/components/schemas/DocumentContent"
+            "$ref": "#/components/schemas/Document"
         meta:
           type: object
           required:
@@ -154,10 +121,6 @@ components:
           properties:
             pagination:
               "$ref": "#/components/schemas/PaginationMeta"
-    DocumentContent:
-      type: object
-    DocumentRelation:
-      type: object
     PaginationMeta:
       type: object
       required:
@@ -165,6 +128,7 @@ components:
       - page
       - items
       - pages
+      additionalProperties: false
       properties:
         count:
           type: number
@@ -184,3 +148,6 @@ components:
         to:
           type: number
           example: 26
+    EmptyResponse:
+      type: object
+      nullable: true

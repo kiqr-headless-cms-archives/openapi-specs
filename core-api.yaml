@@ -5,50 +5,24 @@ info:
   description: Core API for KIQR Headless CMS
   version: 0.5.1
 paths:
-  "/":
-    get:
-      summary: Welcome message
-      tags:
-      - Welcome
-      responses:
-        '200':
-          description: Returns a welcome message
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  name:
-                    type: string
-                    example: KIQR Content API
-                  apiVersion:
-                    type: integer
-                    example: 1
-                  engineVersion:
-                    type: string
-                    example: 1.0.0
-  "/tokeninfo":
+  "/session":
     get:
       summary: Returns current user, project and environment.
       tags:
-      - Authentication
-      operationId: getTokenInfo
+      - Session
+      operationId: getSessionInfo
       security:
       - AppId: []
         BearerAuth: []
       responses:
         '401':
           description: Missing AppId
-          content:
-            application/json:
-              schema:
-                "$ref": "#/components/responses/InvalidAppIdError"
         '200':
-          description: Returns tokeninfo
+          description: Returns session info
           content:
             application/json:
               schema:
-                "$ref": "#/components/responses/TokenInfoResponse"
+                "$ref": "#/components/schemas/SessionInfoResponse"
 servers:
 - url: https://api.kiqr.cloud/v1
 components:
@@ -90,6 +64,7 @@ components:
       required:
       - id
       - name
+      - environment_type
       - updated_at
       - created_at
       properties:
@@ -134,12 +109,7 @@ components:
           format: date-time
           example: '2023-01-17T09:36:08Z'
       additionalProperties: false
-  responses:
-    InvalidAppIdError:
-      description: Missing or invalid AppId
-    InvalidTokenError:
-      description: Missing or invalid token
-    TokenInfoResponse:
+    SessionInfoResponse:
       type: object
       required:
       - environment
