@@ -3,9 +3,9 @@ openapi: 3.0.1
 info:
   title: Content API
   description: Content API for KIQR Headless CMS
-  version: 0.6.3
+  version: 0.7.0
 paths:
-  "/{content_type_slug}/":
+  "/{contentTypeId}/":
     get:
       summary: Returns documents by content type
       tags:
@@ -14,7 +14,7 @@ paths:
       security:
       - environmentId: []
       parameters:
-      - name: content_type_slug
+      - name: contentTypeId
         in: path
         example: posts
         required: true
@@ -22,14 +22,14 @@ paths:
           type: string
       responses:
         '401':
-          description: Query parameter environment_id is missing or invalid
+          description: Query parameter environmentId is missing or invalid
         '200':
           description: Returns a list of documents
           content:
             application/json:
               schema:
                 "$ref": "#/components/schemas/DocumentsCollection"
-  "/{content_type_slug}/{document_slug}":
+  "/{contentTypeId}/{documentSlug}":
     get:
       summary: Returns a document
       tags:
@@ -38,13 +38,13 @@ paths:
       security:
       - environmentId: []
       parameters:
-      - name: content_type_slug
+      - name: contentTypeId
         in: path
         example: posts
         required: true
         schema:
           type: string
-      - name: document_slug
+      - name: documentSlug
         in: path
         example: doc_LMxzy1KnBRQKxFyZ0aGNdqp5
         required: true
@@ -52,7 +52,7 @@ paths:
           type: string
       responses:
         '401':
-          description: Query parameter environment_id is missing or invalid
+          description: Query parameter environmentId is missing or invalid
         '200':
           description: Returns a document
           content:
@@ -65,7 +65,7 @@ components:
   securitySchemes:
     environmentId:
       type: apiKey
-      name: environment_id
+      name: environmentId
       in: query
   schemas:
     Document:
@@ -74,9 +74,10 @@ components:
       - id
       - name
       - slug
+      - contentType
       - content
-      - updated_at
-      - created_at
+      - updatedAt
+      - createdAt
       additionalProperties: false
       properties:
         id:
@@ -88,6 +89,9 @@ components:
         slug:
           type: string
           example: my-first-post
+        contentType:
+          type: string
+          example: posts
         content:
           type: object
           additionalProperties:
@@ -96,11 +100,11 @@ components:
           type: object
           additionalProperties:
             type: object
-        updated_at:
+        updatedAt:
           type: string
           format: date-time
           example: 023-02-13T18:57:03Z
-        created_at:
+        createdAt:
           type: string
           format: date-time
           example: '2023-01-17T09:36:08Z'

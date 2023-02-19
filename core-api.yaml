@@ -3,7 +3,7 @@ openapi: 3.0.1
 info:
   title: Core API
   description: Core API for KIQR Headless CMS
-  version: 0.6.3
+  version: 0.7.0
 paths:
   "/session":
     get:
