@@ -3,7 +3,7 @@ openapi: 3.0.1
 info:
   title: Content API
   description: Content API for KIQR Headless CMS
-  version: 0.7.0
+  version: 0.8.0
 paths:
   "/{contentTypeId}/":
     get:
@@ -103,7 +103,7 @@ components:
         updatedAt:
           type: string
           format: date-time
-          example: 023-02-13T18:57:03Z
+          example: '2023-02-13T18:57:03Z'
         createdAt:
           type: string
           format: date-time

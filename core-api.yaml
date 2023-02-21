@@ -3,46 +3,127 @@ openapi: 3.0.1
 info:
   title: Core API
   description: Core API for KIQR Headless CMS
-  version: 0.7.0
+  version: 0.8.0
 paths:
-  "/session":
+  "/schemas":
     get:
-      summary: Returns current user, project and environment.
+      summary: Retrieve a projects history of schemas
       tags:
-      - Session
-      operationId: getSessionInfo
+      - Schemas
+      operationId: getSchemas
       security:
-      - AppId: []
-        BearerAuth: []
+      - BearerAuth: []
+      parameters:
+      - name: projectId
+        in: header
+        schema:
+          type: string
       responses:
         '401':
-          description: Missing AppId
+          description: Missing or invalid token
         '200':
-          description: Returns session info
+          description: retrieve a list of schemas
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/SessionInfoResponse"
+                type: array
+                items:
+                  "$ref": "#/components/schemas/Schema"
+    post:
+      summary: Create a schema
+      tags:
+      - Schemas
+      operationId: createSchema
+      security:
+      - BearerAuth: []
+      parameters:
+      - name: projectId
+        in: header
+        schema:
+          type: string
+      responses:
+        '401':
+          description: Missing or invalid token
+        '201':
+          description: with empty content types
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Schema"
+        '422':
+          description: with nested invalid field
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                commitMessage:
+                  type: string
+                contentTypesRaw:
+                  type: object
+              required:
+              - commitMessage
+              - contentTypes
+  "/schemas/{schemaId}":
+    get:
+      summary: Retrieve details about schema
+      tags:
+      - Schemas
+      operationId: getSchema
+      security:
+      - BearerAuth: []
+      parameters:
+      - name: projectId
+        in: header
+        schema:
+          type: string
+      - name: schemaId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '401':
+          description: Missing or invalid token
+        '200':
+          description: retrieve a schema
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Schema"
+  "/users/me":
+    get:
+      summary: Retrieve info about the current user
+      tags:
+      - User
+      operationId: getUserinfo
+      security:
+      - BearerAuth: []
+      responses:
+        '401':
+          description: Missing or invalid token
+        '200':
+          description: Returns user information
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/User"
 servers:
 - url: https://api.kiqr.cloud/v1
 components:
   securitySchemes:
-    AppId:
-      type: apiKey
-      name: AppId
-      in: header
     BearerAuth:
       type: http
       scheme: bearer
-      bearerFormat: JWT
   schemas:
     User:
       type: object
       required:
       - id
       - name
-      - updated_at
-      - created_at
+      - updatedAt
+      - createdAt
       properties:
         id:
           type: string
@@ -50,11 +131,11 @@ components:
         name:
           type: string
           example: David Specimen
-        updated_at:
+        updatedAt:
           type: string
           format: date-time
-          example: 023-02-13T18:57:03Z
-        created_at:
+          example: '2023-02-13T18:57:03Z'
+        createdAt:
           type: string
           format: date-time
           example: '2023-01-17T09:36:08Z'
@@ -64,24 +145,24 @@ components:
       required:
       - id
       - name
-      - environment_type
-      - updated_at
-      - created_at
+      - environmentType
+      - updatedAt
+      - createdAt
       properties:
         id:
           type: string
           example: env_RKGOXN3jqMznkC0MDBz1yLr2
         name:
           type: string
-          example: main
-        environment_type:
+          example: development
+        environmentType:
           type: string
           example: development
-        updated_at:
+        updatedAt:
           type: string
           format: date-time
-          example: 023-02-13T18:57:03Z
-        created_at:
+          example: '2023-02-13T18:57:03Z'
+        createdAt:
           type: string
           format: date-time
           example: '2023-01-17T09:36:08Z'
@@ -91,8 +172,8 @@ components:
       required:
       - id
       - name
-      - updated_at
-      - created_at
+      - updatedAt
+      - createdAt
       properties:
         id:
           type: string
@@ -100,25 +181,35 @@ components:
         name:
           type: string
           example: My project name
-        updated_at:
+        updatedAt:
           type: string
           format: date-time
-          example: 023-02-13T18:57:03Z
-        created_at:
+          example: '2023-02-13T18:57:03Z'
+        createdAt:
           type: string
           format: date-time
           example: '2023-01-17T09:36:08Z'
       additionalProperties: false
-    SessionInfoResponse:
+    Schema:
       type: object
       required:
-      - environment
-      - project
-      - user
+      - id
+      - commitMessage
+      - updatedAt
+      - createdAt
       properties:
-        environment:
-          "$ref": "#/components/schemas/Environment"
-        project:
-          "$ref": "#/components/schemas/Project"
-        user:
-          "$ref": "#/components/schemas/User"
+        id:
+          type: string
+          example: schema_RKGOXN3jqMznkC0MDBz1yLr2
+        commitMessage:
+          type: string
+          example: 'chore: My first commit'
+        updatedAt:
+          type: string
+          format: date-time
+          example: '2023-02-13T18:57:03Z'
+        createdAt:
+          type: string
+          format: date-time
+          example: '2023-01-17T09:36:08Z'
+      additionalProperties: false
