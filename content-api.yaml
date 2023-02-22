@@ -3,7 +3,7 @@ openapi: 3.0.1
 info:
   title: Content API
   description: Content API for KIQR Headless CMS
-  version: 0.8.0
+  version: 0.7.0
 paths:
   "/{contentTypeId}/":
     get:
@@ -29,36 +29,6 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/DocumentsCollection"
-  "/{contentTypeId}/{documentSlug}":
-    get:
-      summary: Returns a document
-      tags:
-      - Documents
-      operationId: getDocument
-      security:
-      - environmentId: []
-      parameters:
-      - name: contentTypeId
-        in: path
-        example: posts
-        required: true
-        schema:
-          type: string
-      - name: documentSlug
-        in: path
-        example: doc_LMxzy1KnBRQKxFyZ0aGNdqp5
-        required: true
-        schema:
-          type: string
-      responses:
-        '401':
-          description: Query parameter environmentId is missing or invalid
-        '200':
-          description: Returns a document
-          content:
-            application/json:
-              schema:
-                "$ref": "#/components/schemas/Document"
 servers:
 - url: https://content.kiqr.cloud/v1
 components:
