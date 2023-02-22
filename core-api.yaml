@@ -3,7 +3,7 @@ openapi: 3.0.1
 info:
   title: Core API
   description: Core API for KIQR Headless CMS
-  version: 0.7.0
+  version: 0.9.0
 paths:
   "/schemas":
     get:
@@ -217,32 +217,31 @@ components:
           type: string
           format: date-time
           example: '2023-01-17T09:36:08Z'
-      definitions:
+    ContentType:
+      type: object
+      additionalProperties: false
+      required:
+      - name
+      properties:
+        name:
+          type: string
+        fields:
+          type: object
+          additionalProperties:
+            "$ref": "#/definitions/field"
+    Field:
+      type: object
+      additionalProperties: false
+      properties:
+        description:
+          type: string
+        label:
+          type: string
+        type:
+          type: string
+          enum:
+          - string
+          - text
+          - editor
         content_type:
-          type: object
-          additionalProperties: false
-          required:
-          - name
-          properties:
-            name:
-              type: string
-            fields:
-              type: object
-              additionalProperties:
-                "$ref": "#/definitions/field"
-        field:
-          type: object
-          additionalProperties: false
-          properties:
-            description:
-              type: string
-            label:
-              type: string
-            type:
-              type: string
-              enum:
-              - string
-              - text
-              - editor
-            content_type:
-              type: string
+          type: string
