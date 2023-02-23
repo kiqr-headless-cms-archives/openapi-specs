@@ -3,7 +3,7 @@ openapi: 3.0.1
 info:
   title: Content API
   description: Content API for KIQR Headless CMS
-  version: 0.10.0
+  version: 0.11.0
 paths:
   "/{contentTypeId}/":
     get:
@@ -40,6 +40,7 @@ components:
   schemas:
     Document:
       type: object
+      additionalProperties: false
       required:
       - id
       - name
@@ -48,11 +49,10 @@ components:
       - content
       - updatedAt
       - createdAt
-      additionalProperties: false
       properties:
         id:
           type: string
-          example: doc_LMxzy1KnBRQKxFyZ0aGNdqp5
+          example: doc_zWNY2gOL1xwrYuRqXQnjJZyP
         name:
           type: string
           example: My first post
@@ -64,16 +64,12 @@ components:
           example: posts
         content:
           type: object
-          additionalProperties:
-            type: string
         relations:
           type: object
-          additionalProperties:
-            type: object
         updatedAt:
           type: string
           format: date-time
-          example: '2023-02-13T18:57:03Z'
+          example: '2023-01-17T09:36:08Z'
         createdAt:
           type: string
           format: date-time
@@ -97,19 +93,19 @@ components:
               "$ref": "#/components/schemas/PaginationMeta"
     PaginationMeta:
       type: object
+      additionalProperties: false
       required:
       - count
       - page
       - items
       - pages
-      additionalProperties: false
       properties:
         count:
           type: number
           example: 26
         page:
           type: number
-          example: 1
+          example: 2
         items:
           type: number
           example: 20
@@ -122,6 +118,3 @@ components:
         to:
           type: number
           example: 26
-    EmptyResponse:
-      type: object
-      nullable: true
