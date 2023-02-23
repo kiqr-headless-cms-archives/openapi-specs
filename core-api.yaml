@@ -3,9 +3,9 @@ openapi: 3.0.1
 info:
   title: Core API
   description: Core API for KIQR Headless CMS
-  version: 0.9.0
+  version: 0.10.0
 paths:
-  "/schemas":
+  "/projects/{projectId}/schemas":
     get:
       summary: Retrieve a projects history of schemas
       tags:
@@ -15,7 +15,8 @@ paths:
       - BearerAuth: []
       parameters:
       - name: projectId
-        in: header
+        in: path
+        required: true
         schema:
           type: string
       responses:
@@ -38,7 +39,8 @@ paths:
       - BearerAuth: []
       parameters:
       - name: projectId
-        in: header
+        in: path
+        required: true
         schema:
           type: string
       responses:
@@ -65,7 +67,7 @@ paths:
               required:
               - commitMessage
               - contentTypes
-  "/schemas/{schemaId}":
+  "/projects/{projectId}/schemas/{schemaId}":
     get:
       summary: Retrieve details about schema
       tags:
@@ -75,7 +77,8 @@ paths:
       - BearerAuth: []
       parameters:
       - name: projectId
-        in: header
+        in: path
+        required: true
         schema:
           type: string
       - name: schemaId
