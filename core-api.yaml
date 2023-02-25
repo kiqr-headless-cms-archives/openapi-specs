@@ -3,7 +3,7 @@ openapi: 3.0.1
 info:
   title: Core API
   description: Core API for KIQR Headless CMS
-  version: 0.11.0
+  version: 0.11.1
 paths:
   "/projects/{projectId}/schemas":
     get:
