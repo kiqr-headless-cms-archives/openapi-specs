@@ -3,7 +3,7 @@ openapi: 3.0.1
 info:
   title: Core API
   description: Core API for KIQR Headless CMS
-  version: 0.13.0
+  version: 0.14.0
 paths:
   "/projects/{projectId}/schemas":
     get:
@@ -12,7 +12,7 @@ paths:
       - Schemas
       operationId: getSchemas
       security:
-      - BearerAuth: []
+      - oauth2: []
       parameters:
       - name: projectId
         in: path
@@ -21,7 +21,9 @@ paths:
           type: string
       responses:
         '401':
-          description: Missing or invalid token
+          description: Invalid access token
+        '403':
+          description: Insufficient scope
         '200':
           description: retrieve a list of schemas
           content:
@@ -36,7 +38,7 @@ paths:
       - Schemas
       operationId: createSchema
       security:
-      - BearerAuth: []
+      - oauth2: []
       parameters:
       - name: projectId
         in: path
@@ -45,7 +47,9 @@ paths:
           type: string
       responses:
         '401':
-          description: Missing or invalid token
+          description: Invalid access token
+        '403':
+          description: Insufficient scope
         '201':
           description: with empty content types
           content:
@@ -74,7 +78,7 @@ paths:
       - Schemas
       operationId: getSchema
       security:
-      - BearerAuth: []
+      - oauth2: []
       parameters:
       - name: projectId
         in: path
@@ -88,7 +92,9 @@ paths:
           type: string
       responses:
         '401':
-          description: Missing or invalid token
+          description: Invalid access token
+        '403':
+          description: Insufficient scope
         '200':
           description: retrieve a schema
           content:
@@ -102,10 +108,12 @@ paths:
       - User
       operationId: getUserinfo
       security:
-      - BearerAuth: []
+      - oauth2: []
       responses:
         '401':
-          description: Missing or invalid token
+          description: Invalid access token
+        '403':
+          description: Insufficient scope
         '200':
           description: Returns user information
           content:
@@ -116,9 +124,15 @@ servers:
 - url: https://api.kiqr.cloud/v1
 components:
   securitySchemes:
-    BearerAuth:
-      type: http
-      scheme: bearer
+    oauth2:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://kiqr.cloud/authorize
+          tokenUrl: https://kiqr.cloud/oauth/token
+          scopes:
+            profile: Access user profile & email
+            projects: Full access to projects
   schemas:
     User:
       type: object
