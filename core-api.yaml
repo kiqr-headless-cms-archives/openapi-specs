@@ -3,7 +3,7 @@ openapi: 3.0.1
 info:
   title: Core API
   description: Core API for KIQR Headless CMS
-  version: 0.15.0
+  version: 0.16.4
 paths:
   "/projects/{projectId}/schemas":
     get:
@@ -101,6 +101,56 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/Schema"
+  "/projects":
+    get:
+      summary: Projects available for the current user
+      tags:
+      - Projects
+      operationId: getProjects
+      security:
+      - oauth2: []
+      responses:
+        '401':
+          description: Invalid access token
+        '403':
+          description: Insufficient scope
+        '200':
+          description: Returns a list of projects
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ProjectsCollection"
+    post:
+      summary: Create a project
+      tags:
+      - Projects
+      operationId: createProject
+      security:
+      - oauth2: []
+      parameters: []
+      responses:
+        '401':
+          description: Invalid access token
+        '403':
+          description: Insufficient scope
+        '201':
+          description: returns a project
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Project"
+        '422':
+          description: validation failed
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+              required:
+              - name
   "/users/me":
     get:
       summary: Retrieve info about the current user
@@ -207,6 +257,23 @@ components:
           type: string
           format: date-time
           example: '2023-01-17T09:36:08Z'
+    ProjectsCollection:
+      type: object
+      required:
+      - projects
+      - meta
+      properties:
+        projects:
+          type: array
+          items:
+            "$ref": "#/components/schemas/Project"
+        meta:
+          type: object
+          required:
+          - pagination
+          properties:
+            pagination:
+              "$ref": "#/components/schemas/PaginationMeta"
     Schema:
       type: object
       additionalProperties: false
@@ -262,3 +329,30 @@ components:
           - editor
         content_type:
           type: string
+    PaginationMeta:
+      type: object
+      additionalProperties: false
+      required:
+      - count
+      - page
+      - items
+      - pages
+      properties:
+        count:
+          type: number
+          example: 26
+        page:
+          type: number
+          example: 2
+        items:
+          type: number
+          example: 20
+        pages:
+          type: number
+          example: 2
+        from:
+          type: number
+          example: 21
+        to:
+          type: number
+          example: 26
