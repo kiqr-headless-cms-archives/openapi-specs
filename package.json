@@ -1,0 +1,12 @@
+{
+  "name": "openapi-specs",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:kiqr/openapi-specs.git",
+  "author": "kjellberg <2277443+kjellberg@users.noreply.github.com>",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "@openapitools/openapi-generator-cli": "^2.5.2"
+  }
+}

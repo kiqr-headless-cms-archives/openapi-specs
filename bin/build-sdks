@@ -1,0 +1,104 @@
+#!/usr/bin/env ruby
+
+require 'fileutils'
+
+TMPDIR = File.expand_path("../out", File.dirname(__FILE__))
+SWAGGER_APIS = {
+  "content-api" => {
+    name: "content-api",
+    sdks: {
+      "typescript-fetch": {
+        repo_name: "content-api-js",
+        repo_url: "git@github.com:kiqr/content-api-js.git",
+        config: {
+          npmName: "@kiqr/content-api",
+          supportsES6: true,
+          withInterfaces: true
+        }
+      },
+      ruby: {
+        repo_name: "content-api-ruby",
+        repo_url: "git@github.com:kiqr/content-api-ruby.git",
+        config: {
+          gemName: "kiqr-content-api",
+          gemHomepage: "https://kiqr.dev",
+          library: "faraday",
+          moduleName: "Kiqr::ContentApi",
+          useAutoload: true
+        }
+      }
+    }
+  },
+  "core-api" => {
+    name: "core-api",
+    sdks: {
+      "typescript-fetch": {
+        repo_name: "core-api-js",
+        repo_url: "git@github.com:kiqr/core-api-js.git",
+        config: {
+          npmName: "@kiqr/core-api",
+          supportsES6: true,
+          withInterfaces: true
+        }
+      },
+      ruby: {
+        repo_name: "core-api-ruby",
+        repo_url: "git@github.com:kiqr/core-api-ruby.git",
+        config: {
+          gemName: "kiqr-core-api",
+          gemHomepage: "https://kiqr.dev",
+          library: "faraday",
+          moduleName: "Kiqr::CoreApi",
+          useAutoload: true
+        }
+      }
+    }
+  }
+}.freeze
+
+API_NAME = ARGV[0]
+
+if API_NAME.nil?
+  puts "Usage: ./bin/build-sdks [api_name]"
+  exit 0
+end
+
+raise "Invalid API_NAME: #{API_NAME}" if SWAGGER_APIS[API_NAME].nil?
+
+def cmd!(*args)
+  puts *args
+  system(*args) || abort("\n== Command #{args} failed ==")
+end
+
+WORKDIR_ROOT = File.join(TMPDIR, API_NAME)
+SDKS = SWAGGER_APIS[API_NAME][:sdks]
+
+puts "Building SDKs for \"#{API_NAME}\""
+
+SDKS.each do |generator, sdk_meta|
+  workdir = File.join(WORKDIR_ROOT, sdk_meta[:repo_name])
+  generate_command = "yarn run openapi-generator-cli generate -g #{generator} -i #{API_NAME}.yaml -o #{workdir}"
+  sdk_meta[:config]&.each do |key, value|
+    generate_command += " --additional-properties=#{key}=#{value}"
+  end
+
+  puts "== Clone repository from GitHub =="
+  cmd! "rm -rf #{workdir}"
+  cmd! "git clone #{sdk_meta[:repo_url]} #{workdir}"
+
+  puts "== Build with OpenAPI generator =="
+  cmd! generate_command
+
+  FileUtils.chdir workdir do
+    puts "== Push changes to GitHub =="
+    system 'git config user.email "<2277443+kjellberg@users.noreply.github.com>"'
+    system 'git config user.name "kjellberg"'
+
+    puts "\n== Commit changes =="
+    system "git add ."
+    system "git commit -m 'Generate SDK'"
+
+    puts "\n== Push changes to GitHub =="
+    system "git push --force"
+  end
+end
