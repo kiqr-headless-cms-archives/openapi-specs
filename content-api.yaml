@@ -3,8 +3,44 @@ openapi: 3.0.1
 info:
   title: Content API
   description: Content API for KIQR Headless CMS
-  version: 0.15.0
+  version: 0.16.4
 paths:
+  "/{contentTypeId}/{documentId}/relations/{fieldId}":
+    get:
+      summary: Returns a list of related documents
+      tags:
+      - Relationships
+      operationId: getRelations
+      security:
+      - environmentId: []
+      parameters:
+      - name: contentTypeId
+        in: path
+        example: frontpage
+        required: true
+        schema:
+          type: string
+      - name: documentId
+        in: path
+        example: doc_zWNY2gOL1xwrYuRqXQnjJZyP
+        required: true
+        schema:
+          type: string
+      - name: fieldId
+        in: path
+        example: featuredPosts
+        required: true
+        schema:
+          type: string
+      responses:
+        '401':
+          description: Query parameter environmentId is missing or invalid
+        '200':
+          description: Returns a list of related documents
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/DocumentsCollection"
   "/{contentTypeId}/":
     get:
       summary: Returns documents by content type
